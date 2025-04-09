@@ -1,3 +1,8 @@
+# Folders
+**/.vs
+**/Debug
+**/Release
+
 # Prerequisites
 *.d
 
@@ -30,3 +35,4 @@
 *.exe
 *.out
 *.app
+*.bin
