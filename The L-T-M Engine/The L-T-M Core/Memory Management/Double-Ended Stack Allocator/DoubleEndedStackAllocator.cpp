@@ -1,13 +1,10 @@
 #include "DoubleEndedStackAllocator.h"
 
-DoubleEndedStackAllocator::DoubleEndedStackAllocator(std::uint32_t size)
+DoubleEndedStackAllocator::DoubleEndedStackAllocator(std::uint32_t size, std::uint32_t align)
+	: BaseAllocator(size, align) // Call the base class constructor
 {
-	assert(size > 0);
-	m_size = size;
-	m_memory = reinterpret_cast<char*>(AllocAligned(size, 16));
-	m_front = m_memory;
-
 	//if no -1, m_back will point at the byte after the last byte of the memory block
+	m_front = m_memory;
 	m_back = m_memory + size - 1;
 
 	m_topBackMarker = 0; //marker is count from the back
@@ -16,7 +13,7 @@ DoubleEndedStackAllocator::DoubleEndedStackAllocator(std::uint32_t size)
 
 DoubleEndedStackAllocator::~DoubleEndedStackAllocator()
 {
-	FreeAligned(m_memory);
+	FreeAligned(m_memory, m_byteStoreShift);
 	m_memory = nullptr;
 	m_front = nullptr;
 	m_back = nullptr;
@@ -46,11 +43,10 @@ char* DoubleEndedStackAllocator::allocateFromBack(std::uint32_t size)
 	//allow == since will be allocated from old back to new back + 1
 	assert(m_back - size >= m_front);
 
-	char* old_back = m_back;
 	m_back -= size;
 	m_topBackMarker += size;
 
-	return old_back;
+	return m_back;
 }
 
 void DoubleEndedStackAllocator::deallocateFromFront(Marker rollback_marker)
@@ -69,12 +65,6 @@ void DoubleEndedStackAllocator::deallocateFromBack(Marker rollback_marker)
 	m_topBackMarker -= rollback_marker;
 }
 
-std::uint32_t DoubleEndedStackAllocator::getSize() const {
-	return m_size;
-}
-char* DoubleEndedStackAllocator::getMemory() const {
-	return m_memory;
-}
 char* DoubleEndedStackAllocator::getFront() const {
 	return m_front;
 

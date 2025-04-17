@@ -1,15 +1,14 @@
 #include "StackAllocator.h"
 
-StackAllocator::StackAllocator(std::uint32_t bytes) {
+StackAllocator::StackAllocator(std::uint32_t bytes, std::uint32_t align) 
+				: BaseAllocator(bytes, align) 
+{
 	m_topMarker = 0;
-
-	m_size = bytes;
-	m_memory = reinterpret_cast<char*>(AllocAligned(bytes, 8)); // Allocate memory with alignment
 	m_topaddr = m_memory + m_topMarker;
 }
 
 StackAllocator::~StackAllocator() {
-	FreeAligned(m_memory); // Free the allocated memory
+	FreeAligned(m_memory, m_byteStoreShift); // Free the allocated memory
 }
 
 void* StackAllocator::alloc(std::uint32_t bytes) {
@@ -43,11 +42,8 @@ void StackAllocator::clear() {
 	m_topaddr = m_memory + m_topMarker;
 }
 
-char* StackAllocator::getMemPtr() const {
-	return m_memory;
-}
-
 char* StackAllocator::getTopAddress() const {
 	return m_topaddr;
 }
+
 
