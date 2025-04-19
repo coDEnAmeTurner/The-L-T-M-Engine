@@ -15,31 +15,41 @@ struct Test {
 	}
 };
 
-DoubleEndedStackAllocator allocator(1024, 16); // 1 MB
+DoubleEndedStackAllocator allocator(1024, 64); 
 
 int main() {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	char* t1_ptr = allocator.allocateFromFront(sizeof(Test));
-	new (t1_ptr) Test(1, 2.0); // placement new
+	char* t1_ptr = allocator.allocateFromFront(sizeof(std::uint32_t));
+	new (t1_ptr) int(5); // placement new
+	char* t3_ptr = allocator.allocateFromFront(sizeof(Test));
+	new (t3_ptr) Test(6, 7.5); // placement new
 
+	char* t4_ptr = allocator.allocateFromBack(sizeof(double));
+	new (t4_ptr) double(7.89); // placement new
 	char* t2_ptr = allocator.allocateFromBack(sizeof(Test));
 	new (t2_ptr) Test(3, 4.0); // placement new
 
-	Test& t1 = *reinterpret_cast<Test*>(t1_ptr);
+	int& t1 = *reinterpret_cast<int*>(t1_ptr);
 	Test& t2 = *reinterpret_cast<Test*>(t2_ptr);
+	Test& t3 = *reinterpret_cast<Test*>(t3_ptr);
+	double& t4 = *reinterpret_cast<double*>(t4_ptr);
 
-	printf("size of Test: %zu\n", sizeof(Test)); // 16 bytes or is it?
-	
-	std::string t1_str = t1.ToString();
+	std::string t1_str = std::to_string(t1);
 	std::string t2_str = t2.ToString();
+	std::string t3_str = t3.ToString();
+	std::string t4_str = std::to_string(t4);
 
 	const char* t1_cstr = t1_str.c_str();
 	const char* t2_cstr = t2_str.c_str();
+	const char* t3_cstr = t3_str.c_str();
+	const char* t4_cstr = t4_str.c_str();
 
 	assert(_CrtCheckMemory());
 	printf("t1: %s\n", t1_cstr);
+	printf("t3: %s\n", t3_cstr);
 	printf("t2: %s\n", t2_cstr);
+	printf("t4: %s\n", t4_cstr);
 
 	return 0;
 }

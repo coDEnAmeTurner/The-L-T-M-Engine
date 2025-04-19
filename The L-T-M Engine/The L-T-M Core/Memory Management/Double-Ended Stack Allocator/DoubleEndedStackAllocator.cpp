@@ -5,7 +5,9 @@ DoubleEndedStackAllocator::DoubleEndedStackAllocator(std::uint32_t size, std::ui
 {
 	//if no -1, m_back will point at the byte after the last byte of the memory block
 	m_front = m_memory;
-	m_back = m_memory + size - 1;
+
+	//using 1 past byte method: back is pointing at 1 byte out of bound
+	m_back = m_memory + size;
 
 	m_topBackMarker = 0; //marker is count from the back
 	m_topFrontMarker = 0; //vice versa
@@ -13,7 +15,7 @@ DoubleEndedStackAllocator::DoubleEndedStackAllocator(std::uint32_t size, std::ui
 
 DoubleEndedStackAllocator::~DoubleEndedStackAllocator()
 {
-	FreeAligned(m_memory, m_byteStoreShift);
+	free_aligned(m_memory, m_byteStoreShift);
 	m_memory = nullptr;
 	m_front = nullptr;
 	m_back = nullptr;

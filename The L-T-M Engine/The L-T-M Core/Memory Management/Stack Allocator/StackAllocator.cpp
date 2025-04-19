@@ -8,7 +8,7 @@ StackAllocator::StackAllocator(std::uint32_t bytes, std::uint32_t align)
 }
 
 StackAllocator::~StackAllocator() {
-	FreeAligned(m_memory, m_byteStoreShift); // Free the allocated memory
+	free_aligned(m_memory, m_byteStoreShift); // Free the allocated memory
 }
 
 void* StackAllocator::alloc(std::uint32_t bytes) {
