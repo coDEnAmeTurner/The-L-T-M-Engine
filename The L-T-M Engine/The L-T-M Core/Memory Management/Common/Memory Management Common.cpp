@@ -1,21 +1,28 @@
 #include "Memory Management Common.h"
 
+std::uint32_t BaseAllocator::s_minimum_align = 8;
+
 // Shift the given address upwards if/as necessary to
 // ensure it is aligned to the given number of bytes.
-uintptr_t align_address(uintptr_t addr, size_t align)
+uintptr_t align_address(uintptr_t addr, size_t align, uintptr_t rear_bound)
 {
 	const size_t mask = align - 1;
+
 	assert((align & mask) == 0); // pwr of 2
+
 	uintptr_t addrAligned = addr + mask;
 	size_t not_mask = ~mask;
 	uintptr_t addrAlignedMask = addrAligned & not_mask;
+
+	assert(addrAlignedMask <= rear_bound);
+
 	return addrAlignedMask;
 }
 
 template<typename T>
-T* align_pointer(T* ptr, size_t align) {
+T* align_pointer(T* ptr, size_t align, uintptr_t rear_bound) {
 	const uintptr_t addr = reinterpret_cast<uintptr_t>(ptr);
-	const uintptr_t addrAligned = align_address(addr, align);
+	const uintptr_t addrAligned = align_address(addr, align, rear_bound);
 	return reinterpret_cast<T*>(addrAligned);
 }
 
@@ -28,7 +35,7 @@ void* alloc_org_aligned(std::uint32_t bytes, size_t align, std::uint32_t& bytes_
 	// Align the block. If no alignment occurred,
 	// shift it up the full 'align' bytes so we
 	// always have room to store the shift.
-	char* pAlignedMem = align_pointer(pRawMem, align);
+	char* pAlignedMem = align_pointer(pRawMem, align, reinterpret_cast<uintptr_t>(pRawMem + actualBytes - 1));
 	if (pAlignedMem == pRawMem)
 		pAlignedMem += align;
 	// Determine the shift, and store it.
@@ -58,15 +65,7 @@ void free_aligned(void* pMem, std::uint32_t& bytes_store_shift)
 	}
 }
 
-std::uint32_t log2(std::uint32_t x) {
-	unsigned long index;
-	_BitScanReverse(&index, x);
-	return index;
-}
 
-bool is_pow_of_2(std::uint32_t x) {
-	return (x != 0) && ((x & (x - 1)) == 0);
-}
 
 std::uint32_t BaseAllocator::getSize() const {
 	return m_size;

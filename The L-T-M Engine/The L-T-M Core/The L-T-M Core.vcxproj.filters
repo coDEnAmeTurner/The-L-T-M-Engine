@@ -27,6 +27,9 @@
     <ClCompile Include="Memory Management\Stack Allocator\StackAllocator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Utilities\L-T-M Core Utilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory Management\Common\Memory Management Common.h">
@@ -36,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Memory Management\Stack Allocator\StackAllocator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\L-T-M Core Utilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

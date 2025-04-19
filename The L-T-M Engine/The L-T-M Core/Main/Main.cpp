@@ -2,6 +2,7 @@
 #include <string>
 #include <cstring>
 #include "../Memory Management/Double-Ended Stack Allocator/DoubleEndedStackAllocator.h"
+#include "../Memory Management/Stack Allocator/StackAllocator.h"
 
 struct Test {
 	std::uint32_t m_ui; // 4 bytes
@@ -16,18 +17,19 @@ struct Test {
 };
 
 DoubleEndedStackAllocator allocator(1024, 64); 
+StackAllocator stack_allocator(1024, 64);
 
 int main() {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	char* t1_ptr = allocator.allocateFromFront(sizeof(std::uint32_t));
+	char* t1_ptr = reinterpret_cast<char*>(stack_allocator.alloc(sizeof(std::uint32_t)));
 	new (t1_ptr) int(5); // placement new
-	char* t3_ptr = allocator.allocateFromFront(sizeof(Test));
+	char* t3_ptr = reinterpret_cast<char*>(stack_allocator.alloc(sizeof(Test)));
 	new (t3_ptr) Test(6, 7.5); // placement new
 
-	char* t4_ptr = allocator.allocateFromBack(sizeof(double));
+	char* t4_ptr = reinterpret_cast<char*>(stack_allocator.alloc(sizeof(double)));
 	new (t4_ptr) double(7.89); // placement new
-	char* t2_ptr = allocator.allocateFromBack(sizeof(Test));
+	char* t2_ptr = reinterpret_cast<char*>(stack_allocator.alloc(sizeof(Test)));
 	new (t2_ptr) Test(3, 4.0); // placement new
 
 	int& t1 = *reinterpret_cast<int*>(t1_ptr);
@@ -48,8 +50,20 @@ int main() {
 	assert(_CrtCheckMemory());
 	printf("t1: %s\n", t1_cstr);
 	printf("t3: %s\n", t3_cstr);
-	printf("t2: %s\n", t2_cstr);
 	printf("t4: %s\n", t4_cstr);
+	printf("t2: %s\n", t2_cstr);
+
+	stack_allocator.freeToPtr(t2_ptr);
+	stack_allocator.freeToPtr(t4_ptr);
+	stack_allocator.freeToPtr(t3_ptr);
+	stack_allocator.freeToPtr(t1_ptr);
+
+	t3_ptr = reinterpret_cast<char*>(stack_allocator.alloc(sizeof(Test)));
+	new (t3_ptr) Test(6, 7.5); // placement new
+	t3 = *reinterpret_cast<Test*>(t3_ptr);
+	t3_str = t3.ToString();
+	t3_cstr = t3_str.c_str();
+	printf("t3: %s\n", t3_cstr);
 
 	return 0;
 }

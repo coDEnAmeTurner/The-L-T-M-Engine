@@ -12,8 +12,8 @@ public:
 
 	char* getTopAddress() const;
 	Marker getTopMarker() const;
-	void freeToMarker(Marker marker);
-	void* alloc(std::uint32_t bytes);
+	void freeToPtr(char* ptr);
+	void* alloc(std::uint32_t bytes, std::uint32_t elem_size = 0, bool is_array = false);
 	void clear();
 private:
 	Marker m_topMarker;
