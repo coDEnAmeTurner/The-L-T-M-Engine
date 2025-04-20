@@ -24,6 +24,9 @@
     <ClCompile Include="Memory Management\Double-Ended Stack Allocator\DoubleEndedStackAllocator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Utilities\L-T-M Core Utilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Memory Management\Stack Allocator\StackAllocator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -33,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Memory Management\Double-Ended Stack Allocator\DoubleEndedStackAllocator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\L-T-M Core Utilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Memory Management\Stack Allocator\StackAllocator.h">

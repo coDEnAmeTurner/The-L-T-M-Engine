@@ -1,0 +1,30 @@
+#pragma once
+#include <cstdint>
+#include <cassert>
+#include "../Common/Memory Management Common.h"
+
+typedef std::uint32_t Marker;
+
+class StackAllocator {
+public:
+	using Marker = std::uint32_t;
+
+	std::uint32_t getSize() const;
+	void deallocateFromFront(char* ptr);
+	void* allocateFromFront(std::uint32_t bytes, std::uint32_t elem_size = 0, bool is_array = false);
+	StackAllocator(std::uint32_t bytes, std::uint32_t align);
+	~StackAllocator();
+
+	char* getFront() const;
+	Marker getTopFrontMarker() const;
+
+	void clear();
+protected:
+	std::uint32_t m_size;
+	char* m_front;
+	std::uint32_t m_align;
+	std::uint32_t m_byteStoreShift = 0; // Total size of the memory block
+	Marker m_topFrontMarker;
+	char* m_topfront;
+	static std::uint32_t s_minimum_align;
+};

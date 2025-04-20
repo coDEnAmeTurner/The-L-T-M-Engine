@@ -1,90 +1,72 @@
 #include "DoubleEndedStackAllocator.h"
 
-DoubleEndedStackAllocator::DoubleEndedStackAllocator(std::uint32_t size)
+DoubleEndedStackAllocator::DoubleEndedStackAllocator(std::uint32_t size, std::uint32_t align)
+	: StackAllocator(size, align) // Call the base class constructor
 {
-	assert(size > 0);
-	m_size = size;
-	m_memory = reinterpret_cast<char*>(AllocAligned(size, 16));
-	m_front = m_memory;
-
-	//if no -1, m_back will point at the byte after the last byte of the memory block
-	m_back = m_memory + size - 1;
-
-	m_topBackMarker = 0; //marker is count from the back
-	m_topFrontMarker = 0; //vice versa
+	//using 1 past byte method: back is pointing at 1 byte out of bound
+	m_back_p1 = m_front + size;
+	m_topBack_p1 = m_back_p1;
+	m_topBackMarker = 0;
 }
 
 DoubleEndedStackAllocator::~DoubleEndedStackAllocator()
 {
-	FreeAligned(m_memory);
-	m_memory = nullptr;
-	m_front = nullptr;
-	m_back = nullptr;
-	m_size = 0;
+	m_back_p1 = nullptr;
 	m_topBackMarker = 0;
-	m_topFrontMarker = 0;
-}
-
-char* DoubleEndedStackAllocator::allocateFromFront(std::uint32_t size)
-{
-	assert(size > 0);
-
-	//allow == since will be allocated from old front to new front - 1
-	assert(m_front + size <= m_back);
-
-	char* old_front = m_front;
-	m_front += size;
-	m_topFrontMarker += size;
-
-	return old_front;
 }
 
 char* DoubleEndedStackAllocator::allocateFromBack(std::uint32_t size)
 {
 	assert(size > 0);
 
-	//allow == since will be allocated from old back to new back + 1
-	assert(m_back - size >= m_front);
+	std::uint32_t align = ternary_pred(size >= s_minimum_align, size, s_minimum_align);
+	char* noaligned_topback = m_topBack_p1 - size;
+	char* pre_aligned_topback = noaligned_topback - align;
 
-	char* old_back = m_back;
-	m_back -= size;
-	m_topBackMarker += size;
+	assert(pre_aligned_topback >= m_topfront);
 
-	return old_back;
+	char* aligned_topback = align_pointer(
+		pre_aligned_topback,
+		align,
+		reinterpret_cast<uintptr_t>(noaligned_topback + 1)
+	);
+	aligned_topback = ternary_pred(aligned_topback == pre_aligned_topback, aligned_topback + align, aligned_topback);
+	
+	assert(aligned_topback - 1 >= m_topfront);
+
+	std::uint32_t shift = aligned_topback - pre_aligned_topback;
+	aligned_topback[-1] = *reinterpret_cast<char*>(&shift);
+
+	m_topBack_p1 = pre_aligned_topback;
+	m_topBackMarker = m_topBack_p1 - m_back_p1;
+
+	return aligned_topback;
 }
 
-void DoubleEndedStackAllocator::deallocateFromFront(Marker rollback_marker)
+void DoubleEndedStackAllocator::deallocateFromBack(char* rollback_to_ptr, uint32_t block_size)
 {
-	assert(rollback_marker <= m_topFrontMarker);
+	assert(rollback_to_ptr >= m_topBack_p1 && rollback_to_ptr < m_back_p1);
+	assert(rollback_to_ptr - 1 >= m_topfront);
 
-	m_front -= rollback_marker;
-	m_topFrontMarker -= rollback_marker;
+	union { uint16_t t; char c; } u;
+	u.c = rollback_to_ptr[-1];
+
+	uint16_t shift = u.t;
+	char* org_rollback_ptr = rollback_to_ptr - shift;
+
+	m_topBack_p1 = org_rollback_ptr + block_size;
+	m_topBackMarker = m_back_p1 - m_topBack_p1;
 }
 
-void DoubleEndedStackAllocator::deallocateFromBack(Marker rollback_marker)
-{
-	assert(rollback_marker <= m_topBackMarker);
-
-	m_back += rollback_marker;
-	m_topBackMarker -= rollback_marker;
+char* DoubleEndedStackAllocator::getBack_p1() const {
+	return m_back_p1;
 }
 
-std::uint32_t DoubleEndedStackAllocator::getSize() const {
-	return m_size;
-}
-char* DoubleEndedStackAllocator::getMemory() const {
-	return m_memory;
-}
-char* DoubleEndedStackAllocator::getFront() const {
-	return m_front;
-
-}
-char* DoubleEndedStackAllocator::getBack() const {
-	return m_back;
-}
-Marker DoubleEndedStackAllocator::getTopFrontMarker() const {
-	return m_topFrontMarker;
-}
 Marker DoubleEndedStackAllocator::getTopBackMarker() const {
 	return m_topBackMarker;
+}
+
+
+char* DoubleEndedStackAllocator::getTopBack_p1() const {
+	return m_topBack_p1;
 }
