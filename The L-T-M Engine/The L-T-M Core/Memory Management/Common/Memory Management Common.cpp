@@ -1,24 +1,5 @@
 #include "Memory Management Common.h"
 
-std::uint32_t BaseAllocator::s_minimum_align = 8;
-
-// Shift the given address upwards if/as necessary to
-// ensure it is aligned to the given number of bytes.
-uintptr_t align_address(uintptr_t addr, size_t align, uintptr_t rear_bound)
-{
-	const size_t mask = align - 1;
-
-	assert((align & mask) == 0); // pwr of 2
-
-	uintptr_t addrAligned = addr + mask;
-	size_t not_mask = ~mask;
-	uintptr_t addrAlignedMask = addrAligned & not_mask;
-
-	assert(addrAlignedMask <= rear_bound);
-
-	return addrAlignedMask;
-}
-
 template<typename T>
 T* align_pointer(T* ptr, size_t align, uintptr_t rear_bound) {
 	const uintptr_t addr = reinterpret_cast<uintptr_t>(ptr);
@@ -65,21 +46,17 @@ void free_aligned(void* pMem, std::uint32_t& bytes_store_shift)
 	}
 }
 
-
-
-std::uint32_t BaseAllocator::getSize() const {
-	return m_size;
-}
-
-char* BaseAllocator::getMemory() const {
-	return m_memory;
-}
-
-BaseAllocator::BaseAllocator(std::uint32_t bytes, std::uint32_t align) 
-							: m_size(bytes), m_align(align)
+uintptr_t align_address(uintptr_t addr, size_t align, uintptr_t rear_bound)
 {
-	assert(m_size > 0 && align > 0 && is_pow_of_2(align)); // Ensure size and alignment are valid
-	
-	m_memory = reinterpret_cast<char*>(alloc_org_aligned(bytes, align, m_byteStoreShift)); // Allocate memory with alignment
+	const size_t mask = align - 1;
 
+	assert((align & mask) == 0); // pwr of 2
+
+	uintptr_t addrAligned = addr + mask;
+	size_t not_mask = ~mask;
+	uintptr_t addrAlignedMask = addrAligned & not_mask;
+
+	assert(addrAlignedMask <= rear_bound);
+
+	return addrAlignedMask;
 }

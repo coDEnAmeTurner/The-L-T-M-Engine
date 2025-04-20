@@ -22,14 +22,14 @@ StackAllocator stack_allocator(1024, 64);
 int main() {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	char* t1_ptr = reinterpret_cast<char*>(stack_allocator.alloc(sizeof(std::uint32_t)));
+	char* t1_ptr = reinterpret_cast<char*>(allocator.allocateFromFront(sizeof(std::uint32_t)));
 	new (t1_ptr) int(5); // placement new
-	char* t3_ptr = reinterpret_cast<char*>(stack_allocator.alloc(sizeof(Test)));
+	char* t3_ptr = reinterpret_cast<char*>(allocator.allocateFromFront(sizeof(Test)));
 	new (t3_ptr) Test(6, 7.5); // placement new
 
-	char* t4_ptr = reinterpret_cast<char*>(stack_allocator.alloc(sizeof(double)));
+	char* t4_ptr = reinterpret_cast<char*>(allocator.allocateFromBack(sizeof(double)));
 	new (t4_ptr) double(7.89); // placement new
-	char* t2_ptr = reinterpret_cast<char*>(stack_allocator.alloc(sizeof(Test)));
+	char* t2_ptr = reinterpret_cast<char*>(allocator.allocateFromBack(sizeof(Test)));
 	new (t2_ptr) Test(3, 4.0); // placement new
 
 	int& t1 = *reinterpret_cast<int*>(t1_ptr);
@@ -50,20 +50,21 @@ int main() {
 	assert(_CrtCheckMemory());
 	printf("t1: %s\n", t1_cstr);
 	printf("t3: %s\n", t3_cstr);
-	printf("t4: %s\n", t4_cstr);
 	printf("t2: %s\n", t2_cstr);
+	printf("t4: %s\n", t4_cstr);
 
-	stack_allocator.freeToPtr(t2_ptr);
-	stack_allocator.freeToPtr(t4_ptr);
-	stack_allocator.freeToPtr(t3_ptr);
-	stack_allocator.freeToPtr(t1_ptr);
+	allocator.deallocateFromFront(t3_ptr);
+	allocator.deallocateFromFront(t1_ptr);
+	allocator.deallocateFromBack(t2_ptr, sizeof(t2));
+	allocator.deallocateFromBack(t4_ptr, sizeof(t4));
 
-	t3_ptr = reinterpret_cast<char*>(stack_allocator.alloc(sizeof(Test)));
+	t3_ptr = reinterpret_cast<char*>(allocator.allocateFromFront(sizeof(Test)));
 	new (t3_ptr) Test(6, 7.5); // placement new
 	t3 = *reinterpret_cast<Test*>(t3_ptr);
 	t3_str = t3.ToString();
 	t3_cstr = t3_str.c_str();
 	printf("t3: %s\n", t3_cstr);
+	allocator.deallocateFromFront(t3_ptr);
 
 	return 0;
 }

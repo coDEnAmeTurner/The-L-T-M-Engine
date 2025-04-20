@@ -24,10 +24,10 @@
     <ClCompile Include="Memory Management\Double-Ended Stack Allocator\DoubleEndedStackAllocator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Memory Management\Stack Allocator\StackAllocator.cpp">
+    <ClCompile Include="Utilities\L-T-M Core Utilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities\L-T-M Core Utilities.cpp">
+    <ClCompile Include="Memory Management\Stack Allocator\StackAllocator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,10 +38,10 @@
     <ClInclude Include="Memory Management\Double-Ended Stack Allocator\DoubleEndedStackAllocator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Memory Management\Stack Allocator\StackAllocator.h">
+    <ClInclude Include="Utilities\L-T-M Core Utilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Utilities\L-T-M Core Utilities.h">
+    <ClInclude Include="Memory Management\Stack Allocator\StackAllocator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
