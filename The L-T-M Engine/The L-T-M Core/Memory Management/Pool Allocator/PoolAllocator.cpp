@@ -40,30 +40,31 @@ PoolAllocator::PoolAllocator(std::uint32_t block_count, std::uint32_t compo_coun
 	);
 
 	m_currentFreePtr = m_memory;
-	char* near_tailptr_p1 = m_memory + allocated_size - m_compoCount * m_compoSize;
+	char* tailptr_p1 = m_memory + allocated_size;
 
-	for (char* block_jump_ptr = m_memory; block_jump_ptr < near_tailptr_p1; block_jump_ptr += compo_count * compo_size) 
+	for (char* block_jump_ptr = m_memory; block_jump_ptr < tailptr_p1; block_jump_ptr += compo_count * compo_size) 
 	{
 		char* next_free_ptr = block_jump_ptr + static_cast<size_t>(m_compoCount * m_compoSize);
 		uintptr_t next_free_val = reinterpret_cast<uintptr_t>(next_free_ptr);
 
 		//if block size > 8 bytes, the value saved in block will be
 		//0xXXXXXXXXXXXXXXXXffffff
-		std::memcpy(
+		size_t remain_msbs_count = m_compoCount * m_compoSize - sizeof(uintptr_t);
+		std::memset(
 			block_jump_ptr,
+			0,
+			remain_msbs_count
+		);
+		std::memcpy(
+			block_jump_ptr + remain_msbs_count,
 			reinterpret_cast<char*>(&next_free_val),
 			sizeof(uintptr_t)
-		);
-		std::memset(
-			block_jump_ptr + sizeof(uintptr_t),
-			0,
-			m_compoCount * m_compoSize - sizeof(uintptr_t)
 		);
 	}
 
 	//set the final block to point to null
 	std::memset(
-		near_tailptr_p1,
+		tailptr_p1 - m_compoCount * m_compoSize,
 		0,
 		m_compoCount * m_compoSize
 	);
