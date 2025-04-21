@@ -14,7 +14,7 @@ public:
 	char* getCurrentFreePtr() const;
 
 	//memory -> block -> component (comp)
-	PoolAllocator(std::uint32_t block_count, std::uint32_t compo_count, std::uint32_t compo_size, bool manual_align = false);
+	PoolAllocator(std::uint32_t block_count, std::uint32_t compo_count, std::uint32_t compo_size, bool manual_align = false, bool align_by_block = false);
 	~PoolAllocator();
 private:
 	char* m_memory = nullptr;

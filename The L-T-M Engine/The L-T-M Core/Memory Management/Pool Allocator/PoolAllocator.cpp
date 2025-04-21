@@ -1,6 +1,6 @@
 #include "PoolAllocator.h"
 
-PoolAllocator::PoolAllocator(std::uint32_t block_count, std::uint32_t compo_count, std::uint32_t compo_size, bool manual_align) {
+PoolAllocator::PoolAllocator(std::uint32_t block_count, std::uint32_t compo_count, std::uint32_t compo_size, bool manual_align, bool align_by_block) {
 	assert(block_count > 0 && compo_count > 0 && compo_size > 0);
 	assert(is_pow_of_2(block_count) && is_pow_of_2(compo_count) && is_pow_of_2(compo_size));
 	assert(check_u32_divisor(block_count, compo_count));
@@ -10,8 +10,21 @@ PoolAllocator::PoolAllocator(std::uint32_t block_count, std::uint32_t compo_coun
 	m_compoSize = compo_size;
 	m_manualAlign = manual_align;
 
-	size_t org_size = block_count * compo_count * compo_size;
-	uint32_t align = ternary_pred(compo_size >= 8u, compo_size, 8u);
+	size_t block_size = compo_count * compo_size;
+	size_t org_size = block_count * block_size;
+	size_t min_align = 8u;
+	size_t align = ternary_pred(align_by_block==true,
+									ternary_pred(
+										block_size >= 8u, 
+										block_size,
+										min_align
+									),
+									ternary_pred(
+										compo_size >= 8u,
+										static_cast<size_t>(compo_size),
+										min_align
+									)
+								);
 	std::uint32_t allocated_size = ternary_pred(manual_align == true, org_size + align, org_size);
 
 	m_memory = new char[allocated_size];
@@ -35,7 +48,7 @@ PoolAllocator::PoolAllocator(std::uint32_t block_count, std::uint32_t compo_coun
 		uintptr_t next_free_val = reinterpret_cast<uintptr_t>(next_free_ptr);
 
 		//if block size > 8 bytes, the value saved in block will be
-		//0xXXXXXXXXXXXXXXXX00000...0
+		//0xXXXXXXXXXXXXXXXXffffff
 		std::memcpy(
 			block_jump_ptr,
 			reinterpret_cast<char*>(&next_free_val),
@@ -55,6 +68,8 @@ PoolAllocator::PoolAllocator(std::uint32_t block_count, std::uint32_t compo_coun
 		m_compoCount * m_compoSize
 	);
 }
+
+
 PoolAllocator::~PoolAllocator() {
 	m_memory = ternary_pred(
 		m_manualAlign == true,
