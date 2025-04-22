@@ -22,11 +22,11 @@ struct Test {
 DoubleEndedStackAllocator allocator(1024, 64); 
 StackAllocator stack_allocator(1024, 64);
 PoolAllocator dmat4_pool_allocator(8, 4, sizeof(double));
-PoolAllocator dvec4_m128_pool_allocator(8, 4, sizeof(double) * 4, true, true);
 
 int main() {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
+PoolAllocator dvec4_m128_pool_allocator(8, 4, sizeof(double) * 4, true, true);
 	double values[] = { 1.0, 2.0, 3.0, 4.0 };
 	char* block = dvec4_m128_pool_allocator.alloc();
 	std::memcpy(block, values, sizeof(values));
