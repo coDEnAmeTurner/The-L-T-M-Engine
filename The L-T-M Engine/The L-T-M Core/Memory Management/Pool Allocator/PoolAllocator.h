@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <cstring>
+#include <stdio.h>
 #include "../Common/Memory Management Common.h"
 #include "../../Utilities/L-T-M Core Utilities.h"
 

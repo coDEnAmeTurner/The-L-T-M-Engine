@@ -19,38 +19,33 @@ struct Test {
 	}
 };
 
-DoubleEndedStackAllocator allocator(1024, 64); 
+DoubleEndedStackAllocator allocator(1024, 64);
 StackAllocator stack_allocator(1024, 64);
-PoolAllocator dmat4_pool_allocator(8, 4, sizeof(double));
 
 int main() {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-PoolAllocator dvec4_m128_pool_allocator(8, 4, sizeof(double) * 4, true, true);
+	//8 vec4 of doubles
+	PoolAllocator dvec4_m256_pool_allocator(8, 4, sizeof(double), true, true);
+
 	double values[] = { 1.0, 2.0, 3.0, 4.0 };
-	char* block = dvec4_m128_pool_allocator.alloc();
+	alignas(32) char* block = dvec4_m256_pool_allocator.alloc();
 	std::memcpy(block, values, sizeof(values));
-	__m128d vec = _mm_load_pd(reinterpret_cast<double*>(block));
+	__m256d vec = _mm256_load_pd(reinterpret_cast<double*>(block));
 
-	char* block2 = dvec4_m128_pool_allocator.alloc();
+	alignas(32) char* block2 = dvec4_m256_pool_allocator.alloc();
 	std::memcpy(block2, values, sizeof(values));
-	__m128d vec2 = _mm_load_pd(reinterpret_cast<double*>(block2));
+	__m256d vec2 = _mm256_load_pd(reinterpret_cast<double*>(block2));
 
-	double result_values[16 + 16];
-	char* char_result = reinterpret_cast<char*>(result_values);
-	char* aligned_result = align_pointer(char_result, 16, reinterpret_cast<uintptr_t>(char_result + 15));
-	if (aligned_result == char_result)
-		aligned_result += 16;
-	std::uint8_t shift = aligned_result - char_result;
-	aligned_result[-1] = *reinterpret_cast<char*>(&shift);
-	__m128d result = _mm_add_pd(vec, vec2);
-	_mm_store_pd(reinterpret_cast<double*>(aligned_result), result);
+	alignas(32) double result_values[4];
+	__m256d result = _mm256_add_pd(vec, vec2);
+	_mm256_store_pd(reinterpret_cast<double*>(result_values), result);
 
-	printf("result => %.1f %.1f %.1f %.1f\n", 
-		aligned_result[0],
-		aligned_result[1],
-		aligned_result[2],
-		aligned_result[3]);
+	printf("result => %.1f %.1f %.1f %.1f\n",
+		result_values[0],
+		result_values[1],
+		result_values[2],
+		result_values[3]);
 
 	return 0;
 }

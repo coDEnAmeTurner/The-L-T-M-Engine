@@ -27,17 +27,25 @@ PoolAllocator::PoolAllocator(std::uint32_t block_count, std::uint32_t compo_coun
 								);
 	std::uint32_t allocated_size = ternary_pred(manual_align == true, org_size + align, org_size);
 
-	m_memory = new char[allocated_size];
+	char* unaligned_mmemory = new char[allocated_size];
 
 	m_memory = ternary_pred(
 		manual_align == true,
 		align_pointer(
-			m_memory,
+			unaligned_mmemory,
 			align,
-			reinterpret_cast<uintptr_t>(m_memory + allocated_size - 1)
+			reinterpret_cast<uintptr_t>(unaligned_mmemory + allocated_size - 1)
 		),
-		m_memory
+		unaligned_mmemory
 	);
+
+	if (manual_align)
+	{
+		if (unaligned_mmemory == m_memory)
+			m_memory += align;
+		uint32_t shift = m_memory - unaligned_mmemory;
+		m_memory[-1] = *reinterpret_cast<char*>(&shift);
+	}
 
 	m_currentFreePtr = m_memory;
 	char* tailptr_p1 = m_memory + allocated_size;
@@ -89,7 +97,10 @@ PoolAllocator::~PoolAllocator() {
 
 char* PoolAllocator::alloc() {
 	char* free_returned_ptr =  m_currentFreePtr;
-	uintptr_t next_free_val = *reinterpret_cast<uintptr_t*>(free_returned_ptr);
+	char* internal_address_value_ptr = free_returned_ptr + m_compoSize * m_compoCount - sizeof(uintptr_t);
+	alignas(8) uintptr_t next_free_val;
+	std::memcpy(&next_free_val, internal_address_value_ptr, sizeof(uintptr_t));
+	printf("Wrote pointer: %p\n", reinterpret_cast<char*>(next_free_val));
 	m_currentFreePtr = reinterpret_cast<char*>(next_free_val);
 
 	return free_returned_ptr;
