@@ -48,10 +48,10 @@ PoolAllocator::PoolAllocator(std::uint32_t block_count, std::uint32_t compo_coun
 	}
 
 	m_currentFreePtr = m_memory;
-	char* tailptr_p1 = m_memory + allocated_size - compo_count * compo_size;
+	char* tailptr_p1 = m_memory + org_size - compo_count * compo_size;
 	char* block_jump_ptr = nullptr;
 
-	for (block_jump_ptr = m_memory; block_jump_ptr < tailptr_p1; block_jump_ptr += compo_count * compo_size) 
+	for (block_jump_ptr = m_memory; block_jump_ptr < tailptr_p1; block_jump_ptr += block_size) 
 	{
 		char* next_free_ptr = block_jump_ptr + static_cast<size_t>(m_compoCount * m_compoSize);
 		uintptr_t next_free_val = reinterpret_cast<uintptr_t>(next_free_ptr);
@@ -110,15 +110,16 @@ char* PoolAllocator::alloc() {
 void PoolAllocator::free(char* target_ptr) {
 	char* next_free_ptr = m_currentFreePtr;
 	uintptr_t next_free_val = reinterpret_cast<uintptr_t>(target_ptr);
-	std::memcpy(
+std:uint32_t remainders_msbytes = m_compoCount * m_compoSize - sizeof(uintptr_t);
+	std::memset(
 		target_ptr,
+		0,
+		remainders_msbytes
+	);
+	std::memcpy(
+		target_ptr + remainders_msbytes,
 		reinterpret_cast<char*>(&next_free_val),
 		sizeof(uintptr_t)
-	);
-	std::memset(
-		target_ptr + sizeof(uintptr_t),
-		0,
-		m_compoCount * m_compoSize - sizeof(uintptr_t)
 	);
 	m_currentFreePtr = target_ptr;
 

@@ -47,5 +47,28 @@ int main() {
 		result_values[2],
 		result_values[3]);
 
+	dvec4_m256_pool_allocator.free(block);
+	dvec4_m256_pool_allocator.free(block2);
+
+	block = dvec4_m256_pool_allocator.alloc();
+	std::memcpy(block, values, sizeof(values));
+	vec = _mm256_load_pd(reinterpret_cast<double*>(block));
+
+	block2 = dvec4_m256_pool_allocator.alloc();
+	std::memcpy(block2, values, sizeof(values));
+	vec2 = _mm256_load_pd(reinterpret_cast<double*>(block2));
+
+	result = _mm256_add_pd(vec, vec2);
+	_mm256_store_pd(reinterpret_cast<double*>(result_values), result);
+
+	printf("result => %.1f %.1f %.1f %.1f\n",
+		result_values[0],
+		result_values[1],
+		result_values[2],
+		result_values[3]);
+
+	dvec4_m256_pool_allocator.free(block);
+	dvec4_m256_pool_allocator.free(block2);
+
 	return 0;
 }
