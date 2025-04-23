@@ -48,9 +48,10 @@ PoolAllocator::PoolAllocator(std::uint32_t block_count, std::uint32_t compo_coun
 	}
 
 	m_currentFreePtr = m_memory;
-	char* tailptr_p1 = m_memory + allocated_size;
+	char* tailptr_p1 = m_memory + allocated_size - compo_count * compo_size;
+	char* block_jump_ptr = nullptr;
 
-	for (char* block_jump_ptr = m_memory; block_jump_ptr < tailptr_p1; block_jump_ptr += compo_count * compo_size) 
+	for (block_jump_ptr = m_memory; block_jump_ptr < tailptr_p1; block_jump_ptr += compo_count * compo_size) 
 	{
 		char* next_free_ptr = block_jump_ptr + static_cast<size_t>(m_compoCount * m_compoSize);
 		uintptr_t next_free_val = reinterpret_cast<uintptr_t>(next_free_ptr);
@@ -72,7 +73,7 @@ PoolAllocator::PoolAllocator(std::uint32_t block_count, std::uint32_t compo_coun
 
 	//set the final block to point to null
 	std::memset(
-		tailptr_p1 - m_compoCount * m_compoSize,
+		block_jump_ptr,
 		0,
 		m_compoCount * m_compoSize
 	);
@@ -100,7 +101,7 @@ char* PoolAllocator::alloc() {
 	char* internal_address_value_ptr = free_returned_ptr + m_compoSize * m_compoCount - sizeof(uintptr_t);
 	alignas(8) uintptr_t next_free_val;
 	std::memcpy(&next_free_val, internal_address_value_ptr, sizeof(uintptr_t));
-	printf("Wrote pointer: %p\n", reinterpret_cast<char*>(next_free_val));
+	std::cout << next_free_val << "\n";
 	m_currentFreePtr = reinterpret_cast<char*>(next_free_val);
 
 	return free_returned_ptr;
