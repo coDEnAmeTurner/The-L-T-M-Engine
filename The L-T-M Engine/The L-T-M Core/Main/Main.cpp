@@ -1,8 +1,11 @@
 #include <cstdint>
 #include <string>
 #include <cstring>
+#include <emmintrin.h>
+#include <intrin.h>
 #include "../Memory Management/Double-Ended Stack Allocator/DoubleEndedStackAllocator.h"
 #include "../Memory Management/Stack Allocator/StackAllocator.h"
+#include "../Memory Management/Pool Allocator/PoolAllocator.h"
 
 struct Test {
 	std::uint32_t m_ui; // 4 bytes
@@ -16,55 +19,56 @@ struct Test {
 	}
 };
 
-DoubleEndedStackAllocator allocator(1024, 64); 
+DoubleEndedStackAllocator allocator(1024, 64);
 StackAllocator stack_allocator(1024, 64);
 
 int main() {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	char* t1_ptr = reinterpret_cast<char*>(allocator.allocateFromFront(sizeof(std::uint32_t)));
-	new (t1_ptr) int(5); // placement new
-	char* t3_ptr = reinterpret_cast<char*>(allocator.allocateFromFront(sizeof(Test)));
-	new (t3_ptr) Test(6, 7.5); // placement new
+	//8 vec4 of doubles
+	PoolAllocator dvec4_m256_pool_allocator(8, 4, sizeof(double), true, true);
 
-	char* t4_ptr = reinterpret_cast<char*>(allocator.allocateFromBack(sizeof(double)));
-	new (t4_ptr) double(7.89); // placement new
-	char* t2_ptr = reinterpret_cast<char*>(allocator.allocateFromBack(sizeof(Test)));
-	new (t2_ptr) Test(3, 4.0); // placement new
+	double values[] = { 1.0, 2.0, 3.0, 4.0 };
+	alignas(32) char* block = dvec4_m256_pool_allocator.alloc();
+	std::memcpy(block, values, sizeof(values));
+	__m256d vec = _mm256_load_pd(reinterpret_cast<double*>(block));
 
-	int& t1 = *reinterpret_cast<int*>(t1_ptr);
-	Test& t2 = *reinterpret_cast<Test*>(t2_ptr);
-	Test& t3 = *reinterpret_cast<Test*>(t3_ptr);
-	double& t4 = *reinterpret_cast<double*>(t4_ptr);
+	alignas(32) char* block2 = dvec4_m256_pool_allocator.alloc();
+	std::memcpy(block2, values, sizeof(values));
+	__m256d vec2 = _mm256_load_pd(reinterpret_cast<double*>(block2));
 
-	std::string t1_str = std::to_string(t1);
-	std::string t2_str = t2.ToString();
-	std::string t3_str = t3.ToString();
-	std::string t4_str = std::to_string(t4);
+	alignas(32) double result_values[4];
+	__m256d result = _mm256_add_pd(vec, vec2);
+	_mm256_store_pd(reinterpret_cast<double*>(result_values), result);
 
-	const char* t1_cstr = t1_str.c_str();
-	const char* t2_cstr = t2_str.c_str();
-	const char* t3_cstr = t3_str.c_str();
-	const char* t4_cstr = t4_str.c_str();
+	printf("result => %.1f %.1f %.1f %.1f\n",
+		result_values[0],
+		result_values[1],
+		result_values[2],
+		result_values[3]);
 
-	assert(_CrtCheckMemory());
-	printf("t1: %s\n", t1_cstr);
-	printf("t3: %s\n", t3_cstr);
-	printf("t2: %s\n", t2_cstr);
-	printf("t4: %s\n", t4_cstr);
+	dvec4_m256_pool_allocator.free(block);
+	dvec4_m256_pool_allocator.free(block2);
 
-	allocator.deallocateFromFront(t3_ptr);
-	allocator.deallocateFromFront(t1_ptr);
-	allocator.deallocateFromBack(t2_ptr, sizeof(t2));
-	allocator.deallocateFromBack(t4_ptr, sizeof(t4));
+	block = dvec4_m256_pool_allocator.alloc();
+	std::memcpy(block, values, sizeof(values));
+	vec = _mm256_load_pd(reinterpret_cast<double*>(block));
 
-	t3_ptr = reinterpret_cast<char*>(allocator.allocateFromFront(sizeof(Test)));
-	new (t3_ptr) Test(6, 7.5); // placement new
-	t3 = *reinterpret_cast<Test*>(t3_ptr);
-	t3_str = t3.ToString();
-	t3_cstr = t3_str.c_str();
-	printf("t3: %s\n", t3_cstr);
-	allocator.deallocateFromFront(t3_ptr);
+	block2 = dvec4_m256_pool_allocator.alloc();
+	std::memcpy(block2, values, sizeof(values));
+	vec2 = _mm256_load_pd(reinterpret_cast<double*>(block2));
+
+	result = _mm256_add_pd(vec, vec2);
+	_mm256_store_pd(reinterpret_cast<double*>(result_values), result);
+
+	printf("result => %.1f %.1f %.1f %.1f\n",
+		result_values[0],
+		result_values[1],
+		result_values[2],
+		result_values[3]);
+
+	dvec4_m256_pool_allocator.free(block);
+	dvec4_m256_pool_allocator.free(block2);
 
 	return 0;
 }
