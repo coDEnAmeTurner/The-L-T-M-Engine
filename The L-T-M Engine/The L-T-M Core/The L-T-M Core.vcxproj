@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClCompile Include="Main\Main.cpp" />
     <ClCompile Include="Memory Management\Common\Memory Management Common.cpp" />
+    <ClCompile Include="Memory Management\Double-Buffured Allocator\DoubleBufferedAllocator.cpp" />
     <ClCompile Include="Memory Management\Double-Ended Stack Allocator\DoubleEndedStackAllocator.cpp" />
     <ClCompile Include="Memory Management\Pool Allocator\PoolAllocator.cpp" />
     <ClCompile Include="Memory Management\Stack Allocator\StackAllocator.cpp" />
@@ -138,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory Management\Common\Memory Management Common.h" />
+    <ClInclude Include="Memory Management\Double-Buffured Allocator\DoubleBufferedAllocator.h" />
     <ClInclude Include="Memory Management\Double-Ended Stack Allocator\DoubleEndedStackAllocator.h" />
     <ClInclude Include="Memory Management\Pool Allocator\PoolAllocator.h" />
     <ClInclude Include="Memory Management\Stack Allocator\StackAllocator.h" />
