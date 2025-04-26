@@ -31,7 +31,7 @@ char* StackAllocator::getFront() const {
 	return m_topfront;
 }
 
-void* StackAllocator::allocateFromFront(std::uint32_t bytes, std::uint32_t elem_size, bool is_array) {
+void* StackAllocator::allocateFromFront(std::uint32_t bytes, std::uint32_t arr_elem_size, bool is_array) {
 	assert(bytes > 0);
 	assert(m_topFrontMarker + bytes <= m_size);
 
@@ -46,7 +46,11 @@ void* StackAllocator::allocateFromFront(std::uint32_t bytes, std::uint32_t elem_
 		m_topfront,
 		ternary_pred(
 			is_array == true,
-			elem_size,
+			ternary_pred(
+				arr_elem_size <= s_minimum_align,
+				s_minimum_align,
+				arr_elem_size
+			),
 			align
 		),
 		reinterpret_cast<uintptr_t>(rear_ptr)
