@@ -105,10 +105,14 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <AdditionalIncludeDirectories>D:\Boost\boost_1_87_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\Boost\boost_1_87_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libboost_context-vc143-mt-gd-x64-1_87.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -120,27 +124,36 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <AdditionalIncludeDirectories>D:\Boost\boost_1_87_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\Boost\boost_1_87_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libboost_context-vc143-mt-gd-x64-1_87.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main\Main.cpp" />
     <ClCompile Include="Memory Management\Common\Memory Management Common.cpp" />
+    <ClCompile Include="Memory Management\Double-Buffured Allocator\DoubleBufferedAllocator.cpp" />
     <ClCompile Include="Memory Management\Double-Ended Stack Allocator\DoubleEndedStackAllocator.cpp" />
+    <ClCompile Include="Memory Management\Handle\Handle.cpp" />
     <ClCompile Include="Memory Management\Pool Allocator\PoolAllocator.cpp" />
     <ClCompile Include="Memory Management\Stack Allocator\StackAllocator.cpp" />
     <ClCompile Include="Utilities\L-T-M Core Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory Management\Common\Memory Management Common.h" />
+    <ClInclude Include="Memory Management\Double-Buffured Allocator\DoubleBufferedAllocator.h" />
     <ClInclude Include="Memory Management\Double-Ended Stack Allocator\DoubleEndedStackAllocator.h" />
+    <ClInclude Include="Memory Management\Handle\Handle.h" />
     <ClInclude Include="Memory Management\Pool Allocator\PoolAllocator.h" />
     <ClInclude Include="Memory Management\Stack Allocator\StackAllocator.h" />
+    <ClInclude Include="Test\Test.h" />
     <ClInclude Include="Utilities\L-T-M Core Utilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -19,6 +19,24 @@ public:
 	Marker getTopFrontMarker() const;
 
 	void clear();
+
+	void* allocate(std::uint32_t bytes, std::uint32_t elem_size = 0, bool is_array = false)
+	{
+		return allocateFromFront(bytes, elem_size, is_array);
+	}
+	void deallocate(char* ptr)
+	{
+		deallocateFromFront(ptr);
+	}
+	char* getMemory() const
+	{
+		return getFront();
+	}
+	Marker getTop() const
+	{
+		return getTopFrontMarker();
+	}
+
 protected:
 	std::uint32_t m_size;
 	char* m_front;
