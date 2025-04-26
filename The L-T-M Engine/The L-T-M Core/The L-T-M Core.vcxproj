@@ -141,6 +141,7 @@
     <ClCompile Include="Memory Management\Common\Memory Management Common.cpp" />
     <ClCompile Include="Memory Management\Double-Buffured Allocator\DoubleBufferedAllocator.cpp" />
     <ClCompile Include="Memory Management\Double-Ended Stack Allocator\DoubleEndedStackAllocator.cpp" />
+    <ClCompile Include="Memory Management\Handle\Handle.cpp" />
     <ClCompile Include="Memory Management\Pool Allocator\PoolAllocator.cpp" />
     <ClCompile Include="Memory Management\Stack Allocator\StackAllocator.cpp" />
     <ClCompile Include="Utilities\L-T-M Core Utilities.cpp" />
@@ -149,8 +150,10 @@
     <ClInclude Include="Memory Management\Common\Memory Management Common.h" />
     <ClInclude Include="Memory Management\Double-Buffured Allocator\DoubleBufferedAllocator.h" />
     <ClInclude Include="Memory Management\Double-Ended Stack Allocator\DoubleEndedStackAllocator.h" />
+    <ClInclude Include="Memory Management\Handle\Handle.h" />
     <ClInclude Include="Memory Management\Pool Allocator\PoolAllocator.h" />
     <ClInclude Include="Memory Management\Stack Allocator\StackAllocator.h" />
+    <ClInclude Include="Test\Test.h" />
     <ClInclude Include="Utilities\L-T-M Core Utilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -36,6 +36,9 @@
     <ClCompile Include="Memory Management\Double-Buffured Allocator\DoubleBufferedAllocator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Memory Management\Handle\Handle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory Management\Common\Memory Management Common.h">
@@ -54,6 +57,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Memory Management\Double-Buffured Allocator\DoubleBufferedAllocator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory Management\Handle\Handle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
