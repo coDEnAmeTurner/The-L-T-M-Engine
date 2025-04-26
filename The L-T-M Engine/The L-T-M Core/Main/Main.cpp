@@ -6,10 +6,10 @@
 #include <thread>
 #include <mutex>
 #include <windows.h>
-#include "../Memory Management/Double-Ended Stack Allocator/DoubleEndedStackAllocator.h"
-#include "../Memory Management/Double-Buffured Allocator/DoubleBufferedAllocator.h"
-#include "../Memory Management/Stack Allocator/StackAllocator.h"
-#include "../Memory Management/Pool Allocator/PoolAllocator.h"
+#include "../Engine Support System/Memory Management/Double-Ended Stack Allocator/DoubleEndedStackAllocator.h"
+#include "../Engine Support System/Memory Management/Double-Buffured Allocator/DoubleBufferedAllocator.h"
+#include "../Engine Support System/Memory Management/Stack Allocator/StackAllocator.h"
+#include "../Engine Support System/Memory Management/Pool Allocator/PoolAllocator.h"
 #include "../Test/Test.h"
 
 
