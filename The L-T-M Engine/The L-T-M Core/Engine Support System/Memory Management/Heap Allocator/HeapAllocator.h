@@ -4,6 +4,8 @@
 #include <cassert>
 #include <malloc.h>
 #include <algorithm>
+#include <format>
+#include <numeric>
 #include <Common/Memory Management Common.h>
 #include <L-T-M Core Utilities.h>
 
@@ -26,7 +28,7 @@ public:
 	static HANDLE alloc(std::uint32_t size);
 	static void dealloc(HANDLE handle);
 
-	static void relocate(std::uint32_t bytes);
+	static void relocate(std::uint32_t block_count);
 	static HeapAllocator* getInstance() { return m_instance; }
 	std::vector<HandleEntry>& getTable() const { return m_table; }
 
@@ -48,6 +50,11 @@ private:
 	static std::vector<HandleEntry> m_table;
 	static std::vector<HandleEntry> m_freeList;
 	static HeapAllocator* m_instance;
+	//m_memory:
+	//each block already has: 
+	// space for shift (padding), 
+	// the shift value store in 1 byte
+	// the actual size of allocation
 	static void* m_memory;
 };
 

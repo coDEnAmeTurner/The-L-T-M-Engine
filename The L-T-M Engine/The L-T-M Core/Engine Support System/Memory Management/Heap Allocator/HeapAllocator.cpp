@@ -19,24 +19,16 @@ void HeapAllocator::init(std::uint32_t memo_init_size) {
 	m_freeList.push_back({ m_memory, m_memoSize });
 }
 HANDLE HeapAllocator::alloc(std::uint32_t size) {
-	assert(size <= m_memoSize || "Allocation size exceeds memory size");
-
 	//try to find the worst fit at most 2 times
-	std::vector<HandleEntry>::iterator worst_fit_it = m_freeList.end();
-	uint8_t try_ind;
-	for (try_ind = 0; try_ind < 2; try_ind++) {
-		worst_fit_it = std::max(
-			m_freeList.begin(),
-			m_freeList.end(),
-			[&](const HandleEntry& entry) {return entry.size >= size; }
-		);
-		if (worst_fit_it != m_freeList.end())
-			break;
-		if (try_ind == 0)
-			relocate(m_memoSize);
-	}
-
-	assert(worst_fit_it != m_freeList.end() || "No suitable free block found");
+	std::vector<HandleEntry>::iterator worst_fit_it = std::max(
+		m_freeList.begin(),
+		m_freeList.end(),
+		[&](const HandleEntry& entry) {return entry.size >= size; }
+	);
+	printf("No suitable free block found: \nSize to alloc: %d\nCurrent free size: %d",
+		size,
+		std::accumulate(m_freeList.begin(), m_freeList.end(), 0)
+	);
 
 	//align ptr of worst fit block
 	HandleEntry& free_block = *worst_fit_it;
@@ -117,6 +109,13 @@ void HeapAllocator::destroy() {
 
 //this returns the handle for the next realocation in the currently used block count
 //returns -1 if the end of the nonreloctable is met
-void HeapAllocator::relocate(std::uint32_t bytes) {
+void HeapAllocator::relocate(std::uint32_t block_count) {
+	// If the requested bytes to relocate is greater than current available memory, no need to relocate.
+	assert(block_count <= m_memoSize || std::format("Relocate {} at max", m_memoSize).c_str());
+
+	// First, we'll gather all allocated blocks and copy them to the lower addresses in memory.
+	uintptr_t next_free_address = (uintptr_t)m_memory;  // Start from the beginning of the memory block.
+
 	
 }
+
