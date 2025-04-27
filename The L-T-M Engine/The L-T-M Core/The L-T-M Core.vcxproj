@@ -158,6 +158,9 @@
     <ClInclude Include="Test\Test.h" />
     <ClInclude Include="Utilities\L-T-M Core Utilities.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Engine Support System\File System and Resources\Resource Manager\RM - ReadMe.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

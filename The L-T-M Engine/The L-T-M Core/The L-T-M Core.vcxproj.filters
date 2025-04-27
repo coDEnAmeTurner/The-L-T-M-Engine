@@ -66,4 +66,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Engine Support System\File System and Resources\Resource Manager\RM - ReadMe.txt" />
+  </ItemGroup>
 </Project>
