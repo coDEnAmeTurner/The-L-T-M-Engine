@@ -1,6 +1,6 @@
 #pragma once
 #include <cstdint>
-#include "../Stack Allocator/StackAllocator.h"
+#include <Stack Allocator/StackAllocator.h>
 
 class DoubledBufferedAllocator {
 public:

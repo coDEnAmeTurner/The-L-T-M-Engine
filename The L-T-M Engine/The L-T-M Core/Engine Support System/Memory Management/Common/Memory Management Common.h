@@ -4,7 +4,7 @@
 #include <intrin.h>
 #include <cmath>
 #include <cstring>
-#include "../../../Utilities/L-T-M Core Utilities.h"
+#include <L-T-M Core Utilities.h>
 
 extern inline void* alloc_org_aligned(std::uint32_t bytes, size_t align, std::uint32_t& bytes_store_shift);
 extern inline void free_aligned(void* ptr, std::uint32_t& bytes_store_shift);

@@ -30,13 +30,13 @@
     <ClCompile Include="Engine Support System\Memory Management\Double-Ended Stack Allocator\DoubleEndedStackAllocator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine Support System\Memory Management\Heap Allocator\HeapAllocator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Engine Support System\Memory Management\Pool Allocator\PoolAllocator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Engine Support System\Memory Management\Stack Allocator\StackAllocator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine Support System\File System and Resources\File System\FileHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,14 +56,17 @@
     <ClInclude Include="Engine Support System\Memory Management\Double-Ended Stack Allocator\DoubleEndedStackAllocator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine Support System\Memory Management\Heap Allocator\HeapAllocator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Engine Support System\Memory Management\Pool Allocator\PoolAllocator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine Support System\Memory Management\Stack Allocator\StackAllocator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Engine Support System\File System and Resources\File System\FileHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Engine Support System\File System and Resources\Resource Manager\RM - ReadMe.txt" />
   </ItemGroup>
 </Project>
