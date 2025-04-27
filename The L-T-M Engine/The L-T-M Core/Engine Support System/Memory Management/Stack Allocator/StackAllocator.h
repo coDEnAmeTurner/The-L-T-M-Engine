@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <cassert>
-#include "../Common/Memory Management Common.h"
+#include <Common/Memory Management Common.h>
 
 typedef std::uint32_t Marker;
 
