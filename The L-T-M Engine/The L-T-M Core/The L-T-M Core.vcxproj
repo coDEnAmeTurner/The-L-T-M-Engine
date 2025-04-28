@@ -105,7 +105,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <AdditionalIncludeDirectories>D:\Boost\boost_1_87_0;$(ProjectDir)Engine Support System\File System and Resources;$(ProjectDir)Engine Support System\Memory Management;$(ProjectDir)Test;$(ProjectDir)Utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Boost\boost_1_87_0;$(ProjectDir)Engine Support System\File System and Resources\File System;$(ProjectDir)Test;$(ProjectDir)Utilities;$(ProjectDir)Engine Support System\Game Loop\GameLoopManager;$(ProjectDir)Engine Support System\Memory Management\Common;$(ProjectDir)Engine Support System\File System and Resources\Resource Manager;$(ProjectDir)Engine Support System\Memory Management\Double-Buffured Allocator;$(ProjectDir)Engine Support System\Memory Management\Double-Ended Stack Allocator;$(ProjectDir)Engine Support System\Memory Management\Heap Allocator;$(ProjectDir)Engine Support System\Memory Management\Pool Allocator;$(ProjectDir)Engine Support System\Memory Management\Stack Allocator;$(ProjectDir)Engine Support System\Game Loop\FrameListener;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -125,7 +125,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <AdditionalIncludeDirectories>D:\Boost\boost_1_87_0;$(ProjectDir)Engine Support System\File System and Resources;$(ProjectDir)Engine Support System\Memory Management;$(ProjectDir)Test;$(ProjectDir)Utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Boost\boost_1_87_0;$(ProjectDir)Engine Support System\File System and Resources\File System;$(ProjectDir)Test;$(ProjectDir)Utilities;$(ProjectDir)Engine Support System\Game Loop\GameLoopManager;$(ProjectDir)Engine Support System\Memory Management\Common;$(ProjectDir)Engine Support System\File System and Resources\Resource Manager;$(ProjectDir)Engine Support System\Memory Management\Double-Buffured Allocator;$(ProjectDir)Engine Support System\Memory Management\Double-Ended Stack Allocator;$(ProjectDir)Engine Support System\Memory Management\Heap Allocator;$(ProjectDir)Engine Support System\Memory Management\Pool Allocator;$(ProjectDir)Engine Support System\Memory Management\Stack Allocator;$(ProjectDir)Engine Support System\Game Loop\FrameListener;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -140,7 +140,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine Support System\File System and Resources\File System\FileHandler.cpp" />
-    <ClCompile Include="Main\Main.cpp" />
+    <ClCompile Include="Engine Support System\Game Loop\FrameListener\FrameListener.cpp" />
+    <ClCompile Include="Engine Support System\Game Loop\GameLoopManager\GameLoopManager.cpp" />
+    <ClCompile Include="Engine Support System\Game Loop\Main.cpp" />
     <ClCompile Include="Engine Support System\Memory Management\Common\Memory Management Common.cpp" />
     <ClCompile Include="Engine Support System\Memory Management\Double-Buffured Allocator\DoubleBufferedAllocator.cpp" />
     <ClCompile Include="Engine Support System\Memory Management\Double-Ended Stack Allocator\DoubleEndedStackAllocator.cpp" />
@@ -150,6 +152,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine Support System\File System and Resources\File System\FileHandler.h" />
+    <ClInclude Include="Engine Support System\Game Loop\FrameListener\FrameListener.h" />
+    <ClInclude Include="Engine Support System\Game Loop\GameLoopManager\GameLoopManager.h" />
     <ClInclude Include="Engine Support System\Memory Management\Common\Memory Management Common.h" />
     <ClInclude Include="Engine Support System\Memory Management\Double-Buffured Allocator\DoubleBufferedAllocator.h" />
     <ClInclude Include="Engine Support System\Memory Management\Double-Ended Stack Allocator\DoubleEndedStackAllocator.h" />
