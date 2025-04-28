@@ -142,7 +142,10 @@
     <ClCompile Include="Engine Support System\File System and Resources\File System\FileHandler.cpp" />
     <ClCompile Include="Engine Support System\Game Loop\FrameListener\FrameListener.cpp" />
     <ClCompile Include="Engine Support System\Game Loop\GameLoopManager\GameLoopManager.cpp" />
+    <ClCompile Include="Engine Support System\Game Loop\Job System\JobSystem.cpp" />
     <ClCompile Include="Engine Support System\Game Loop\Main.cpp" />
+    <ClCompile Include="Engine Support System\Game Loop\Mutex\Mutex.cpp" />
+    <ClCompile Include="Engine Support System\Game Loop\Spin Lock\SpinLock.cpp" />
     <ClCompile Include="Engine Support System\Memory Management\Common\Memory Management Common.cpp" />
     <ClCompile Include="Engine Support System\Memory Management\Double-Buffured Allocator\DoubleBufferedAllocator.cpp" />
     <ClCompile Include="Engine Support System\Memory Management\Double-Ended Stack Allocator\DoubleEndedStackAllocator.cpp" />
@@ -154,6 +157,9 @@
     <ClInclude Include="Engine Support System\File System and Resources\File System\FileHandler.h" />
     <ClInclude Include="Engine Support System\Game Loop\FrameListener\FrameListener.h" />
     <ClInclude Include="Engine Support System\Game Loop\GameLoopManager\GameLoopManager.h" />
+    <ClInclude Include="Engine Support System\Game Loop\Job System\JobSystem.h" />
+    <ClInclude Include="Engine Support System\Game Loop\Mutex\Mutex.h" />
+    <ClInclude Include="Engine Support System\Game Loop\Spin Lock\SpinLock.h" />
     <ClInclude Include="Engine Support System\Memory Management\Common\Memory Management Common.h" />
     <ClInclude Include="Engine Support System\Memory Management\Double-Buffured Allocator\DoubleBufferedAllocator.h" />
     <ClInclude Include="Engine Support System\Memory Management\Double-Ended Stack Allocator\DoubleEndedStackAllocator.h" />

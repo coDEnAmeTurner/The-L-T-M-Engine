@@ -13,7 +13,7 @@ public:
 	static void eraseFrameLis(std::shared_ptr<FrameListener> framelis);
 	static std::unique_ptr<GameLoopManager>& getInstance();
 	static std::vector<std::shared_ptr<FrameListener>>& getFrameListnerList();
-	static void renderMaster();
+	static void renderMain();
 	static bool getRunning();
 private:
 	static std::unique_ptr<GameLoopManager> s_instance;

@@ -39,7 +39,7 @@ std::vector<std::shared_ptr<FrameListener>>& GameLoopManager::getFrameListnerLis
 {
 	return s_instance->m_frameLisList;
 }
-void GameLoopManager::renderMaster() {
+void GameLoopManager::renderMain() {
 	//placeholder
 }
 

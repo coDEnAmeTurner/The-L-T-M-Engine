@@ -24,7 +24,7 @@ int main() {
 
 		}
 		
-		GameLoopManager::renderMaster();
+		GameLoopManager::renderMain();
 
 		for (const auto& listener : GameLoopManager::getFrameListnerList()) {
 			listener->frameEnded();
