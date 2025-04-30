@@ -4,7 +4,6 @@
 #include <memory>
 #include <L-T-M Core Utilities.h>
 
-
 class CPUSpecs
 {
 public:
@@ -18,8 +17,6 @@ public:
 #define WordSize CPUSpecs::getWordSize()
 #define PhysicalCoreCount CPUSpecs::getPhysicalCoreCount()
 #define LogicalCoreCount CPUSpecs::getLogicalCoreCount()
-#define BITS_IN_BYTE 8
-#define MINIMUM_ALIGNMENT WordSize
 
 private:
 	static std::shared_ptr<CPUSpecs> s_instance;
@@ -32,3 +29,5 @@ private:
 	CPUSpecs();
 };
 
+#define BITS_IN_BYTE 8
+#define MINIMUM_ALIGNMENT WordSize
