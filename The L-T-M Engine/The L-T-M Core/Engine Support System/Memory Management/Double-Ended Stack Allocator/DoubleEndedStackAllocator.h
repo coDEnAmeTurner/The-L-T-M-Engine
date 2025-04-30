@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <cassert>
-#include <Stack Allocator/StackAllocator.h>
+#include <StackAllocator.h>
 
 class DoubleEndedStackAllocator : public StackAllocator
 {

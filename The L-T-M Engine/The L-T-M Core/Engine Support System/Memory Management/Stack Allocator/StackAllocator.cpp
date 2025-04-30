@@ -1,6 +1,5 @@
 #include "StackAllocator.h"
 
-std::uint32_t StackAllocator::s_minimum_align = 8;
 
 StackAllocator::StackAllocator(std::uint32_t bytes, std::uint32_t align)
 	: m_size(bytes), m_align(align)
@@ -37,8 +36,8 @@ void* StackAllocator::allocateFromFront(std::uint32_t bytes, std::uint32_t arr_e
 
 	char* rear_ptr = m_front + m_size - 1;
 	std::uint32_t align = ternary_pred(
-		bytes <= s_minimum_align,
-		s_minimum_align,
+		bytes <= m_align,
+		m_align,
 		bytes
 	);
 
@@ -47,8 +46,8 @@ void* StackAllocator::allocateFromFront(std::uint32_t bytes, std::uint32_t arr_e
 		ternary_pred(
 			is_array == true,
 			ternary_pred(
-				arr_elem_size <= s_minimum_align,
-				s_minimum_align,
+				arr_elem_size <= m_align,
+				m_align,
 				arr_elem_size
 			),
 			align
@@ -81,7 +80,7 @@ void StackAllocator::deallocateFromFront(char* ptr) {
 	m_topFrontMarker = m_topfront - m_front;
 }
 
-
 std::uint32_t StackAllocator::getSize() const {
 	return m_size;
 }
+
