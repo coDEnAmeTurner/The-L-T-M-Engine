@@ -22,7 +22,7 @@ public:
 private:
 	static std::unique_ptr<JobSystem> s_instance;
 
-	std::vector<ThreadLTM> m_threadPool;
+	std::vector<std::shared_ptr<ThreadLTM>> m_threadPool;
 	std::shared_ptr<JobQueue> m_queueObj;
 
 	JobSystem();

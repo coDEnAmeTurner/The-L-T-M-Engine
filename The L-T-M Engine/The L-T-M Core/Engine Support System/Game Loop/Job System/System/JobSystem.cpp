@@ -1,11 +1,14 @@
-#include "JobSystem.h"
 #pragma once
+#include "JobSystem.h"
 
 std::unique_ptr<JobSystem> JobSystem::s_instance = nullptr;
 
 JobSystem::JobSystem()
 {
-
+	std::uint8_t thread_count = LOGICAL_CORE_COUNT / 2;
+	for (int i = 0; i < thread_count; i++) {
+		m_threadPool.emplace_back()
+	}
 }
 
 void JobSystem::init()
