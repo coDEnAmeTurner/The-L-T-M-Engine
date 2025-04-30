@@ -1,7 +1,8 @@
 #pragma once
 #include <cstdint>
 #include <cassert>
-#include <Common/Memory Management Common.h>
+#include <memory>
+#include <Memory Management Common.h>
 
 typedef std::uint32_t Marker;
 
@@ -9,15 +10,13 @@ class StackAllocator {
 public:
 	using Marker = std::uint32_t;
 
+	StackAllocator(std::uint32_t bytes, std::uint32_t align);
+	~StackAllocator();
 	std::uint32_t getSize() const;
 	void deallocateFromFront(char* ptr);
 	void* allocateFromFront(std::uint32_t bytes, std::uint32_t elem_size = 0, bool is_array = false);
-	StackAllocator(std::uint32_t bytes, std::uint32_t align);
-	~StackAllocator();
-
 	char* getFront() const;
 	Marker getTopFrontMarker() const;
-
 	void clear();
 
 	void* allocate(std::uint32_t bytes, std::uint32_t elem_size = 0, bool is_array = false)

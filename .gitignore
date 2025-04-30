@@ -12,6 +12,9 @@
 *.o
 *.obj
 
+#Intermediate files
+*.pdb
+
 # Precompiled Headers
 *.gch
 *.pch

@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main\Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Utilities\L-T-M Core Utilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -37,6 +34,33 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Engine Support System\File System and Resources\File System\FileHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine Support System\Game Loop\Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine Support System\Game Loop\GameLoopManager\GameLoopManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine Support System\Game Loop\FrameListener\FrameListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine Support System\Game Loop\Spin Lock\SpinLock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine Support System\Game Loop\Mutex\Mutex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine Support System\Game Loop\CPUSpecs\CPUSpecs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine Support System\Game Loop\Job System\System\JobSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine Support System\Game Loop\Job System\Thread\ThreadLTM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine Support System\Game Loop\Job System\Job Queue\JobQueue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -63,6 +87,33 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine Support System\File System and Resources\File System\FileHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine Support System\Game Loop\GameLoopManager\GameLoopManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine Support System\Game Loop\FrameListener\FrameListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine Support System\Game Loop\Spin Lock\SpinLock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine Support System\Game Loop\Mutex\Mutex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine Support System\Game Loop\CPUSpecs\CPUSpecs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine Support System\Game Loop\Job System\System\JobSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine Support System\Game Loop\Job System\Thread\ThreadLTM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine Support System\Game Loop\Job System\Job Properties\Job Properties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine Support System\Game Loop\Job System\Job Queue\JobQueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
