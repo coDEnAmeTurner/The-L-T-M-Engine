@@ -105,7 +105,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <AdditionalIncludeDirectories>D:\Boost\boost_1_87_0;$(ProjectDir)Engine Support System\File System and Resources\File System;$(ProjectDir)Test;$(ProjectDir)Utilities;$(ProjectDir)Engine Support System\Game Loop\GameLoopManager;$(ProjectDir)Engine Support System\Memory Management\Common;$(ProjectDir)Engine Support System\File System and Resources\Resource Manager;$(ProjectDir)Engine Support System\Memory Management\Double-Buffured Allocator;$(ProjectDir)Engine Support System\Memory Management\Double-Ended Stack Allocator;$(ProjectDir)Engine Support System\Memory Management\Heap Allocator;$(ProjectDir)Engine Support System\Memory Management\Pool Allocator;$(ProjectDir)Engine Support System\Memory Management\Stack Allocator;$(ProjectDir)Engine Support System\Game Loop\FrameListener;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Boost\boost_1_87_0;$(ProjectDir)Engine Support System\File System and Resources\File System;$(ProjectDir)Test;$(ProjectDir)Utilities;$(ProjectDir)Engine Support System\Game Loop\GameLoopManager;$(ProjectDir)Engine Support System\Memory Management\Common;$(ProjectDir)Engine Support System\File System and Resources\Resource Manager;$(ProjectDir)Engine Support System\Memory Management\Double-Buffured Allocator;$(ProjectDir)Engine Support System\Memory Management\Double-Ended Stack Allocator;$(ProjectDir)Engine Support System\Memory Management\Heap Allocator;$(ProjectDir)Engine Support System\Memory Management\Pool Allocator;$(ProjectDir)Engine Support System\Memory Management\Stack Allocator;$(ProjectDir)Engine Support System\Game Loop\FrameListener;$(ProjectDir)Engine Support System\Game Loop\CPUSpecs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -125,7 +125,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <AdditionalIncludeDirectories>D:\Boost\boost_1_87_0;$(ProjectDir)Engine Support System\File System and Resources\File System;$(ProjectDir)Test;$(ProjectDir)Utilities;$(ProjectDir)Engine Support System\Game Loop\GameLoopManager;$(ProjectDir)Engine Support System\Memory Management\Common;$(ProjectDir)Engine Support System\File System and Resources\Resource Manager;$(ProjectDir)Engine Support System\Memory Management\Double-Buffured Allocator;$(ProjectDir)Engine Support System\Memory Management\Double-Ended Stack Allocator;$(ProjectDir)Engine Support System\Memory Management\Heap Allocator;$(ProjectDir)Engine Support System\Memory Management\Pool Allocator;$(ProjectDir)Engine Support System\Memory Management\Stack Allocator;$(ProjectDir)Engine Support System\Game Loop\FrameListener;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Boost\boost_1_87_0;$(ProjectDir)Engine Support System\File System and Resources\File System;$(ProjectDir)Test;$(ProjectDir)Utilities;$(ProjectDir)Engine Support System\Game Loop\GameLoopManager;$(ProjectDir)Engine Support System\Memory Management\Common;$(ProjectDir)Engine Support System\File System and Resources\Resource Manager;$(ProjectDir)Engine Support System\Memory Management\Double-Buffured Allocator;$(ProjectDir)Engine Support System\Memory Management\Double-Ended Stack Allocator;$(ProjectDir)Engine Support System\Memory Management\Heap Allocator;$(ProjectDir)Engine Support System\Memory Management\Pool Allocator;$(ProjectDir)Engine Support System\Memory Management\Stack Allocator;$(ProjectDir)Engine Support System\Game Loop\FrameListener;$(ProjectDir)Engine Support System\Game Loop\CPUSpecs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine Support System\Game Loop\CPUSpecs\CPUSpecs.cpp" />
     <ClCompile Include="Engine Support System\File System and Resources\File System\FileHandler.cpp" />
     <ClCompile Include="Engine Support System\Game Loop\FrameListener\FrameListener.cpp" />
     <ClCompile Include="Engine Support System\Game Loop\GameLoopManager\GameLoopManager.cpp" />
@@ -154,6 +155,7 @@
     <ClCompile Include="Utilities\L-T-M Core Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine Support System\Game Loop\CPUSpecs\CPUSpecs.h" />
     <ClInclude Include="Engine Support System\File System and Resources\File System\FileHandler.h" />
     <ClInclude Include="Engine Support System\Game Loop\FrameListener\FrameListener.h" />
     <ClInclude Include="Engine Support System\Game Loop\GameLoopManager\GameLoopManager.h" />

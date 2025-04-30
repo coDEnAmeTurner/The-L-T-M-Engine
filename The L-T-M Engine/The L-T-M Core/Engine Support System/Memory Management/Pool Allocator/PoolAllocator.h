@@ -2,13 +2,14 @@
 #include <cstdint>
 #include <cstring>
 #include <iostream>
-#include <Common/Memory Management Common.h>
+#include <Memory Management Common.h>
 #include <L-T-M Core Utilities.h>
 
 class PoolAllocator {
 public:
 	char* alloc();
 	void free(char* target_ptr);
+	void clear();
 
 	char* getMemory() const;
 	std::uint64_t getSizeInBytes() const;
@@ -19,6 +20,8 @@ public:
 	~PoolAllocator();
 private:
 	char* m_memory = nullptr;
+	std::size_t m_shift = 0;
+	std::size_t m_align = 0;
 	std::uint32_t m_blockCount = 0;
 	std::uint32_t m_compoCount = 0;
 	std::uint32_t m_compoSize = 0;

@@ -19,7 +19,7 @@ char* DoubleEndedStackAllocator::allocateFromBack(std::uint32_t size)
 {
 	assert(size > 0);
 
-	std::uint32_t align = ternary_pred(size >= s_minimum_align, size, s_minimum_align);
+	std::uint32_t align = ternary_pred(size >= m_align, size, m_align);
 	char* noaligned_topback = m_topBack_p1 - size;
 	char* pre_aligned_topback = noaligned_topback - align;
 

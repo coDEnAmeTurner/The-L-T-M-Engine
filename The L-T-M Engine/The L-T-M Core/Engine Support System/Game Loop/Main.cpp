@@ -12,8 +12,8 @@
 #include <PoolAllocator.h>
 #include <FileHandler.h>
 #include <GameLoopManager.h>
+#include <CPUSpecs.h>
 #include <Test.h>
-
 
 int main() {
 	GameLoopManager::init();

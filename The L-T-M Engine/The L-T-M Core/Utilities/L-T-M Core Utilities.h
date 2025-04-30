@@ -2,6 +2,7 @@
 #include <intrin.h>
 #include<cstdint>
 #include<cassert>
+#include<CPUSpecs.h>
 
 template<typename T>
 inline T ternary_pred(const bool& cond, const T& val_t, const T& val_f) {
@@ -28,4 +29,3 @@ extern inline bool is_pow_of_2(std::uint32_t x);
 extern inline std::uint16_t pow_of_2(std::uint32_t x); 
 extern inline bool check_u32_divisor(std::uint32_t numerator, std::uint32_t denominator);
 
-#define MINIMUM_ALIGNMENT 8

@@ -3,20 +3,16 @@
 std::unique_ptr<GameLoopManager> GameLoopManager::s_instance = nullptr;
 
 GameLoopManager::GameLoopManager() {
-	if (s_instance == nullptr) {
-		s_instance = std::make_unique<GameLoopManager>();
-	}
-}
-
-GameLoopManager::~GameLoopManager() {
-	s_instance = nullptr;
+	//{placeholder}
 }
 
 void GameLoopManager::init() {
-	GameLoopManager();
+	if (s_instance == nullptr) {
+		s_instance = std::unique_ptr<GameLoopManager>(new GameLoopManager());
+	}
 }
 void GameLoopManager::destroy() {
-	
+	s_instance = nullptr;
 }
 void GameLoopManager::pushFrameLis(std::shared_ptr<FrameListener> framelis) {
 	assert(framelis != nullptr || "Frame listner can not be null");

@@ -21,5 +21,4 @@ private:
 	bool m_running = true;
 
 	GameLoopManager();
-	~GameLoopManager();
 };

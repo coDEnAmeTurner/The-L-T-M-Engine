@@ -54,6 +54,9 @@
     <ClCompile Include="Engine Support System\Game Loop\Mutex\Mutex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine Support System\Game Loop\CPUSpecs\CPUSpecs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utilities\L-T-M Core Utilities.h">
@@ -93,6 +96,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine Support System\Game Loop\Mutex\Mutex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine Support System\Game Loop\CPUSpecs\CPUSpecs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

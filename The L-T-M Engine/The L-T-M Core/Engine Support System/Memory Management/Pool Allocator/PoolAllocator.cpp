@@ -25,6 +25,8 @@ PoolAllocator::PoolAllocator(std::uint32_t block_count, std::uint32_t compo_coun
 										min_align
 									)
 								);
+	m_align = align;
+
 	std::uint32_t allocated_size = ternary_pred(manual_align == true, org_size + align, org_size);
 
 	char* unaligned_mmemory = new char[allocated_size];
@@ -45,6 +47,7 @@ PoolAllocator::PoolAllocator(std::uint32_t block_count, std::uint32_t compo_coun
 			m_memory += align;
 		uint32_t shift = m_memory - unaligned_mmemory;
 		m_memory[-1] = *reinterpret_cast<char*>(&shift);
+		m_shift = shift;
 	}
 
 	m_currentFreePtr = m_memory;
@@ -78,7 +81,6 @@ PoolAllocator::PoolAllocator(std::uint32_t block_count, std::uint32_t compo_coun
 		m_compoCount * m_compoSize
 	);
 }
-
 
 PoolAllocator::~PoolAllocator() {
 	m_memory = ternary_pred(
@@ -135,3 +137,4 @@ size_t PoolAllocator::getSizeInBytes() const {
 char* PoolAllocator::getCurrentFreePtr() const {
 	return m_currentFreePtr;
 }
+
