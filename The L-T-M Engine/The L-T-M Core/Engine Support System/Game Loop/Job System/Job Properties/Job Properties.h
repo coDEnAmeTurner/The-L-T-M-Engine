@@ -6,13 +6,15 @@
 #include <DoubleBufferedAllocator.h>
 #include <DoubleEndedStackAllocator.h>
 #include <PoolAllocator.h>
+#include <SpinLockLTM.h>
 
 enum class Priority {
 	LOW, NORMAL, HIGH, CRITICAL
 };
 
 struct Counter {
-	//{placeholder}
+	std::uint32_t m_count;
+	SpinLockLTM m_lock;
 };
 
 struct JobParams {
@@ -27,7 +29,6 @@ using EntryPoint = void(__stdcall*)(void*);
 
 struct JobDeclaration {
 	EntryPoint m_pEntryPoint = nullptr;
-	Priority m_priority = Priority::NORMAL;
 	Counter* m_pCounter = nullptr;
 	
 	JobParams* m_params = nullptr;

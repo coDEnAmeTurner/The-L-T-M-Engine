@@ -8,7 +8,7 @@ void JobQueue::Push(JobDeclaration* job)
 {
 	assert(job != nullptr);
 
-	ScopedLock<SpinLock> lock(&m_lock);
+	ScopedLock<SpinLockLTM> lock(&m_lock);
 	m_queue.push(job);
 }
 

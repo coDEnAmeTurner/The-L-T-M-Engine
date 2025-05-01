@@ -3,6 +3,8 @@
 #include<vector>
 #include<cassert>
 #include<algorithm>
+#include<SpinLockLTM.h>
+#include<ScopedLock.h>
 #include<FrameListener.h>
 
 class GameLoopManager {
@@ -15,8 +17,11 @@ public:
 	static std::vector<std::shared_ptr<FrameListener>>& getFrameListnerList();
 	static void renderMain();
 	static bool getRunning();
+	static void setRunning(bool run);
 private:
 	static std::unique_ptr<GameLoopManager> s_instance;
+
+	SpinLockLTM m_lockRunning;
 	std::vector<std::shared_ptr<FrameListener>> m_frameLisList;
 	bool m_running = true;
 

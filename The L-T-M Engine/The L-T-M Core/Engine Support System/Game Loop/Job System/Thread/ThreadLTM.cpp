@@ -1,7 +1,7 @@
 #include "ThreadLTM.h"
 
 ThreadLTM::ThreadLTM()
-	:m_job(nullptr), m_queue(nullptr), m_threadID(0), m_stack(nullptr), m_doubleEndedStack(nullptr), m_doubleBuffers(nullptr)
+	:m_job(nullptr), m_queue(nullptr), m_thread(0), m_stack(nullptr), m_doubleEndedStack(nullptr), m_doubleBuffers(nullptr)
 {
 
 }
@@ -13,15 +13,27 @@ ThreadLTM::ThreadLTM(std::shared_ptr<JobQueue> queue)
 	m_doubleEndedStack = std::shared_ptr<DoubleEndedStackAllocator>(new DoubleEndedStackAllocator(WORD_SIZE * pow_of_2(18), MINIMUM_ALIGNMENT));
 	m_doubleBuffers = std::shared_ptr<DoubledBufferedAllocator>(new DoubledBufferedAllocator(WORD_SIZE * pow_of_2(17), MINIMUM_ALIGNMENT));
 
-	std::thread t(entryPoint);
+	m_thread = &std::thread(entryPoint);
+}
+
+void ThreadLTM::destroy()
+{
+	assert(m_thread != nullptr);
+
+	m_thread->join();
 }
 
 void ThreadLTM::entryPoint()
 {
-	m_threadID = GetCurrentThreadId();
 	ConvertThreadToFiber(nullptr);
 
 	while (true) {
+		ScopedLock<SpinLockLTM> lock(&m_lockRunning);
+		bool running = GameLoopManager::getRunning();
+		if (!running) {
+			break;
+		}
+
 		//pop queue
 		JobDeclaration* job = nullptr;
 		if (m_masterFiber != nullptr)

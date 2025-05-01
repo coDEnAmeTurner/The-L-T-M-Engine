@@ -43,5 +43,15 @@ std::unique_ptr<GameLoopManager>& GameLoopManager::getInstance() {
 	return s_instance;
 }
 bool GameLoopManager::getRunning() {
-	return s_instance->m_running;
+	s_instance->m_lockRunning.Acquire();
+	bool running = s_instance->m_running;
+	s_instance->m_lockRunning.Release();
+
+	return running;
+}
+
+void GameLoopManager::setRunning(bool run)
+{
+	ScopedLock<SpinLockLTM> lock(&s_instance->m_lockRunning);
+	s_instance->m_running = run;
 }

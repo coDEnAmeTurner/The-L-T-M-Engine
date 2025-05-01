@@ -12,13 +12,15 @@ public:
 	static void init();
 	static void destroy();
 
-	void KickJob(const JobDeclaration& decl);
-	void KickJobs(int count, const JobDeclaration aDecl[]);
+	void kickJob(JobDeclaration& decl);
+	void kickJobs(int count, JobDeclaration aDecl[]);
 	// wait for job to terminate (for its Counter to become zero)
-	void WaitForCounter(Counter* pCounter);
+	void waitForCounter(Counter* pCounter);
+	void decrementCounter(Counter* pCounter);
+	void incrementCounter(Counter* pCounter);
 	// kick jobs and wait for completion
-	void KickJobAndWait(const JobDeclaration& decl);
-	void KickJobsAndWait(int count, const JobDeclaration aDecl[]);
+	void kickJobAndWait(const JobDeclaration& decl);
+	void kickJobsAndWait(int count, const JobDeclaration aDecl[]);
 private:
 	static std::unique_ptr<JobSystem> s_instance;
 

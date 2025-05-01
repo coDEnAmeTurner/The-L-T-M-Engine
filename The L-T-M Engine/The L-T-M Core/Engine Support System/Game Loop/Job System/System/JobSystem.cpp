@@ -7,7 +7,7 @@ JobSystem::JobSystem()
 {
 	std::uint8_t thread_count = LOGICAL_CORE_COUNT / 2;
 	for (int i = 0; i < thread_count; i++) {
-		m_threadPool.emplace_back()
+		m_threadPool.emplace_back(std::shared_ptr<ThreadLTM>(new ThreadLTM(m_queueObj)));
 	}
 }
 
@@ -19,26 +19,36 @@ void JobSystem::init()
 
 void JobSystem::destroy()
 {
-	//{placeholder}
+	for (const auto& t : s_instance->m_threadPool) {
+		t->destroy();
+	}
 }
 
-void JobSystem::KickJob(const JobDeclaration& decl)
+void JobSystem::kickJob(JobDeclaration& decl)
+{
+	s_instance->m_queueObj->Push(&decl);
+}
+
+void JobSystem::kickJobs(int count, JobDeclaration aDecl[])
+{
+	for (std::uint8_t i = 0; i < count; i++) {
+		if (aDecl[i].m_pCounter != nullptr)
+			aDecl[i].m_pCounter->m_count = 1;
+		s_instance->kickJob(aDecl[i]);
+
+	}
+}
+
+void JobSystem::waitForCounter(Counter* pCounter)
+{
+
+}
+
+void JobSystem::kickJobAndWait(const JobDeclaration& decl)
 {
 }
 
-void JobSystem::KickJobs(int count, const JobDeclaration aDecl[])
-{
-}
-
-void JobSystem::WaitForCounter(Counter* pCounter)
-{
-}
-
-void JobSystem::KickJobAndWait(const JobDeclaration& decl)
-{
-}
-
-void JobSystem::KickJobsAndWait(int count, const JobDeclaration aDecl[])
+void JobSystem::kickJobsAndWait(int count, const JobDeclaration aDecl[])
 {
 }
 

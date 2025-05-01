@@ -3,9 +3,9 @@
 #include <iostream>
 #include <assert.h>
 
-thread_local int SpinLock::m_refcount = 0;
+thread_local int SpinLockLTM::m_refcount = 0;
 
-void SpinLock::Acquire() {
+void SpinLockLTM::Acquire() {
 	std::hash<std::thread::id> hasher;
 	std::size_t tid = hasher(std::this_thread::get_id());
 
@@ -27,7 +27,7 @@ void SpinLock::Acquire() {
 	std::atomic_thread_fence(std::memory_order_acquire);
 }
 
-void SpinLock::Release() {
+void SpinLockLTM::Release() {
 	std::atomic_thread_fence(std::memory_order_release);
 
 	std::hash<std::thread::id> hasher;
@@ -44,7 +44,7 @@ void SpinLock::Release() {
 
 }
 
-bool SpinLock::TryAcquire() {
+bool SpinLockLTM::TryAcquire() {
 	std::hash<std::thread::id> hasher;
 	std::size_t tid = hasher(std::this_thread::get_id());
 

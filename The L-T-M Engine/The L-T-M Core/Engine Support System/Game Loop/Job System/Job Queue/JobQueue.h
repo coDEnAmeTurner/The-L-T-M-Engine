@@ -11,7 +11,7 @@ public:
 	void Push(JobDeclaration* job);
 	JobDeclaration* Pop();
 private:
-	SpinLock m_lock;
+	SpinLockLTM m_lock;
 	std::queue<JobDeclaration*> m_queue;
 };
 
