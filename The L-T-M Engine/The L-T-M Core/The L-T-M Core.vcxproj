@@ -105,7 +105,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <AdditionalIncludeDirectories>D:\Boost\boost_1_87_0;$(ProjectDir)Engine Support System\File System and Resources\File System;$(ProjectDir)Test;$(ProjectDir)Utilities;$(ProjectDir)Engine Support System\Game Loop\GameLoopManager;$(ProjectDir)Engine Support System\Memory Management\Common;$(ProjectDir)Engine Support System\File System and Resources\Resource Manager;$(ProjectDir)Engine Support System\Memory Management\Double-Buffured Allocator;$(ProjectDir)Engine Support System\Memory Management\Double-Ended Stack Allocator;$(ProjectDir)Engine Support System\Memory Management\Heap Allocator;$(ProjectDir)Engine Support System\Memory Management\Pool Allocator;$(ProjectDir)Engine Support System\Memory Management\Stack Allocator;$(ProjectDir)Engine Support System\Game Loop\FrameListener;$(ProjectDir)Engine Support System\Game Loop\CPUSpecs;$(ProjectDir)Engine Support System\Game Loop\Job System\Coroutine;$(ProjectDir)Engine Support System\Game Loop\Job System\Thread;$(ProjectDir)Engine Support System\Game Loop\Job System\System;D:\The-L-T-M-Engine\The L-T-M Engine\The L-T-M Core\Engine Support System\Game Loop\Job System\Job Properties;D:\The-L-T-M-Engine\The L-T-M Engine\The L-T-M Core\Engine Support System\Game Loop\Job System\Job Queue;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine Support System\File System and Resources\File System;$(ProjectDir)Test;$(ProjectDir)Utilities;$(ProjectDir)Engine Support System\Game Loop\GameLoopManager;$(ProjectDir)Engine Support System\Memory Management\Common;$(ProjectDir)Engine Support System\File System and Resources\Resource Manager;$(ProjectDir)Engine Support System\Memory Management\Double-Buffured Allocator;$(ProjectDir)Engine Support System\Memory Management\Double-Ended Stack Allocator;$(ProjectDir)Engine Support System\Memory Management\Heap Allocator;$(ProjectDir)Engine Support System\Memory Management\Pool Allocator;$(ProjectDir)Engine Support System\Memory Management\Stack Allocator;$(ProjectDir)Engine Support System\Game Loop\FrameListener;$(ProjectDir)Engine Support System\Game Loop\CPUSpecs;$(ProjectDir)Engine Support System\Game Loop\Job System\Coroutine;$(ProjectDir)Engine Support System\Game Loop\Job System\Thread;$(ProjectDir)Engine Support System\Game Loop\Job System\System;$(ProjectDir)Engine Support System\Game Loop\Job System\Job Properties;$(ProjectDir)Engine Support System\Game Loop\Job System\Job Queue;$(ProjectDir)Engine Support System\Game Loop\Job System\Fiber;$(ProjectDir)Engine Support System\Game Loop\Mutex;$(ProjectDir)Engine Support System\Game Loop\Spin Lock;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -125,7 +125,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <AdditionalIncludeDirectories>D:\Boost\boost_1_87_0;$(ProjectDir)Engine Support System\File System and Resources\File System;$(ProjectDir)Test;$(ProjectDir)Utilities;$(ProjectDir)Engine Support System\Game Loop\GameLoopManager;$(ProjectDir)Engine Support System\Memory Management\Common;$(ProjectDir)Engine Support System\File System and Resources\Resource Manager;$(ProjectDir)Engine Support System\Memory Management\Double-Buffured Allocator;$(ProjectDir)Engine Support System\Memory Management\Double-Ended Stack Allocator;$(ProjectDir)Engine Support System\Memory Management\Heap Allocator;$(ProjectDir)Engine Support System\Memory Management\Pool Allocator;$(ProjectDir)Engine Support System\Memory Management\Stack Allocator;$(ProjectDir)Engine Support System\Game Loop\FrameListener;$(ProjectDir)Engine Support System\Game Loop\CPUSpecs;$(ProjectDir)Engine Support System\Game Loop\Job System\Coroutine;$(ProjectDir)Engine Support System\Game Loop\Job System\Thread;$(ProjectDir)Engine Support System\Game Loop\Job System\System;D:\The-L-T-M-Engine\The L-T-M Engine\The L-T-M Core\Engine Support System\Game Loop\Job System\Job Properties;D:\The-L-T-M-Engine\The L-T-M Engine\The L-T-M Core\Engine Support System\Game Loop\Job System\Job Queue;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine Support System\File System and Resources\File System;$(ProjectDir)Test;$(ProjectDir)Utilities;$(ProjectDir)Engine Support System\Game Loop\GameLoopManager;$(ProjectDir)Engine Support System\Memory Management\Common;$(ProjectDir)Engine Support System\File System and Resources\Resource Manager;$(ProjectDir)Engine Support System\Memory Management\Double-Buffured Allocator;$(ProjectDir)Engine Support System\Memory Management\Double-Ended Stack Allocator;$(ProjectDir)Engine Support System\Memory Management\Heap Allocator;$(ProjectDir)Engine Support System\Memory Management\Pool Allocator;$(ProjectDir)Engine Support System\Memory Management\Stack Allocator;$(ProjectDir)Engine Support System\Game Loop\FrameListener;$(ProjectDir)Engine Support System\Game Loop\CPUSpecs;$(ProjectDir)Engine Support System\Game Loop\Job System\Coroutine;$(ProjectDir)Engine Support System\Game Loop\Job System\Thread;$(ProjectDir)Engine Support System\Game Loop\Job System\System;$(ProjectDir)Engine Support System\Game Loop\Job System\Job Properties;$(ProjectDir)Engine Support System\Game Loop\Job System\Job Queue;$(ProjectDir)Engine Support System\Game Loop\Job System\Fiber;$(ProjectDir)Engine Support System\Game Loop\Mutex;$(ProjectDir)Engine Support System\Game Loop\Spin Lock;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -146,14 +146,15 @@
     <ClCompile Include="Engine Support System\Game Loop\Job System\System\JobSystem.cpp" />
     <ClCompile Include="Engine Support System\Game Loop\Job System\Thread\ThreadLTM.cpp" />
     <ClCompile Include="Engine Support System\Game Loop\Main.cpp" />
-    <ClCompile Include="Engine Support System\Game Loop\Mutex\Mutex.cpp" />
-    <ClCompile Include="Engine Support System\Game Loop\Spin Lock\SpinLock.cpp" />
+    <ClCompile Include="Engine Support System\Game Loop\Mutex\MutexLTM.cpp" />
+    <ClCompile Include="Engine Support System\Game Loop\Spin Lock\SpinLockLTM.cpp" />
     <ClCompile Include="Engine Support System\Memory Management\Common\Memory Management Common.cpp" />
     <ClCompile Include="Engine Support System\Memory Management\Double-Buffured Allocator\DoubleBufferedAllocator.cpp" />
     <ClCompile Include="Engine Support System\Memory Management\Double-Ended Stack Allocator\DoubleEndedStackAllocator.cpp" />
     <ClCompile Include="Engine Support System\Memory Management\Pool Allocator\PoolAllocator.cpp" />
     <ClCompile Include="Engine Support System\Memory Management\Stack Allocator\StackAllocator.cpp" />
     <ClCompile Include="Engine Support System\Game Loop\Job System\Job Queue\JobQueue.cpp" />
+    <ClCompile Include="Engine Support System\Game Loop\Job System\Fiber\FiberLTM.cpp" />
     <ClCompile Include="Utilities\L-T-M Core Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -164,14 +165,16 @@
     <ClInclude Include="Engine Support System\Game Loop\Job System\Job Properties\Job Properties.h" />
     <ClInclude Include="Engine Support System\Game Loop\Job System\System\JobSystem.h" />
     <ClInclude Include="Engine Support System\Game Loop\Job System\Thread\ThreadLTM.h" />
-    <ClInclude Include="Engine Support System\Game Loop\Mutex\Mutex.h" />
-    <ClInclude Include="Engine Support System\Game Loop\Spin Lock\SpinLock.h" />
+    <ClInclude Include="Engine Support System\Game Loop\Mutex\MutexLTM.h" />
+    <ClInclude Include="Engine Support System\Game Loop\Spin Lock\SpinLockLTM.h" />
     <ClInclude Include="Engine Support System\Memory Management\Common\Memory Management Common.h" />
     <ClInclude Include="Engine Support System\Memory Management\Double-Buffured Allocator\DoubleBufferedAllocator.h" />
     <ClInclude Include="Engine Support System\Memory Management\Double-Ended Stack Allocator\DoubleEndedStackAllocator.h" />
     <ClInclude Include="Engine Support System\Memory Management\Pool Allocator\PoolAllocator.h" />
     <ClInclude Include="Engine Support System\Memory Management\Stack Allocator\StackAllocator.h" />
     <ClInclude Include="Engine Support System\Game Loop\Job System\Job Queue\JobQueue.h" />
+    <ClInclude Include="Engine Support System\Game Loop\Job System\Fiber\FiberLTM.h" />
+    <ClInclude Include="Engine Support System\Game Loop\Spin Lock\ScopedLock.h" />
     <ClInclude Include="Test\Test.h" />
     <ClInclude Include="Utilities\L-T-M Core Utilities.h" />
   </ItemGroup>

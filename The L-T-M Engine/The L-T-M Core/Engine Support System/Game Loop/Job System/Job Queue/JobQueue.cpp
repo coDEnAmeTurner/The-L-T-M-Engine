@@ -4,11 +4,19 @@ JobQueue::JobQueue()
 {
 }
 
-void JobQueue::Push()
+void JobQueue::Push(JobDeclaration* job)
 {
+	assert(job != nullptr);
+
+	ScopedLock<SpinLock> lock(&m_lock);
+	m_queue.push(job);
 }
 
-std::shared_ptr<JobDeclaration> JobQueue::Pop()
+JobDeclaration* JobQueue::Pop()
 {
-	return std::shared_ptr<JobDeclaration>();
+	m_lock.Acquire();
+	auto job = m_queue.front();
+	m_lock.Release();
+
+	return job;
 }

@@ -1,15 +1,17 @@
 #pragma once
 #include <queue>
-#include <memory>
+#include <ScopedLock.h>
+#include <SpinLockLTM.h>
 #include <Job Properties.h>
 
 class JobQueue
 {
 public:
 	JobQueue();
-	void Push();
-	std::shared_ptr<JobDeclaration> Pop();
+	void Push(JobDeclaration* job);
+	JobDeclaration* Pop();
 private:
-	std::queue<std::shared_ptr<JobDeclaration>> m_queue;
+	SpinLock m_lock;
+	std::queue<JobDeclaration*> m_queue;
 };
 

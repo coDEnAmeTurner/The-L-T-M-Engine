@@ -15,19 +15,18 @@ struct Counter {
 	//{placeholder}
 };
 
-typedef uintptr_t EntryPoint(JobParams* param);
-
 struct JobParams {
 	std::shared_ptr<StackAllocator> m_stack = nullptr;
 	std::shared_ptr<DoubleEndedStackAllocator> m_doubleEndedStack = nullptr;
 	std::shared_ptr<DoubledBufferedAllocator> m_doubleBuffers = nullptr;
-	std::vector<std::shared_ptr<PoolAllocator>> m_poolAllocators;
+	bool* m_finished = nullptr; //notify thread current fiber is finished
 
 	void* m_param = nullptr;
 };
+using EntryPoint = void(__stdcall*)(void*);
 
 struct JobDeclaration {
-	EntryPoint* m_pEntryPoint = nullptr;
+	EntryPoint m_pEntryPoint = nullptr;
 	Priority m_priority = Priority::NORMAL;
 	Counter* m_pCounter = nullptr;
 	
