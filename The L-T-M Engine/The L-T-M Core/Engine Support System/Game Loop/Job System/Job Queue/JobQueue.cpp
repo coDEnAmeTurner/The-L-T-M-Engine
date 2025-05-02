@@ -8,15 +8,14 @@ void JobQueue::Push(JobDeclaration* job)
 {
 	assert(job != nullptr);
 
-	ScopedLock<SpinLockLTM> lock(&m_lock);
-	m_queue.push(job);
+	m_queue.enqueue(job);
 }
 
 JobDeclaration* JobQueue::Pop()
 {
-	m_lock.Acquire();
-	auto job = m_queue.front();
-	m_lock.Release();
+	JobDeclaration* job = nullptr;
+	if (m_queue.size_approx() != 0)
+		m_queue.try_dequeue(job);
 
 	return job;
 }

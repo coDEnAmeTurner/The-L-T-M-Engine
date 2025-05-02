@@ -2,6 +2,8 @@
 #include <cassert>
 #include <Windows.h>
 #include <Job Properties.h>
+#include <SpinLockLTM.h>
+#include <ScopedLock.h>
 
 class FiberLTM
 {

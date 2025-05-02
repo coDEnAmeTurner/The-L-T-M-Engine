@@ -3,6 +3,7 @@
 #include<cstdint>
 #include<cassert>
 #include<CPUSpecs.h>
+#include<windows.h>
 
 template<typename T>
 inline T ternary_pred(const bool& cond, const T& val_t, const T& val_f) {
@@ -26,6 +27,7 @@ inline T ternary_pred(const bool& cond, const T& val_t, const T& val_f) {
 
 extern inline std::uint32_t log2(std::uint32_t x);
 extern inline bool is_pow_of_2(std::uint32_t x);
-extern inline std::uint16_t pow_of_2(std::uint32_t x); 
+extern inline std::uint32_t pow_of_2(std::uint32_t x); 
 extern inline bool check_u32_divisor(std::uint32_t numerator, std::uint32_t denominator);
+extern inline void set_thread_affinity(HANDLE thread, std::uint8_t core_id);
 

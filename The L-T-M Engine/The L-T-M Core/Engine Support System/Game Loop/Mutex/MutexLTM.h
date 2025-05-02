@@ -1,5 +1,6 @@
 #pragma once
 #include <Windows.h>
+#include <ScopedLock.h>
 
 class MutexLTM {
 public:
@@ -11,3 +12,4 @@ public:
 private:
 	CRITICAL_SECTION m_critSec;
 };
+

@@ -1,5 +1,6 @@
 #pragma once
 #include <atomic>
+#include <ScopedLock.h>
 
 class SpinLockLTM {
 	std::atomic<std::size_t> m_atomic;
@@ -17,3 +18,4 @@ public:
 	bool TryAcquire();
 
 };
+

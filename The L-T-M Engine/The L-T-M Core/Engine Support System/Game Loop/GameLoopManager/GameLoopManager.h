@@ -6,6 +6,7 @@
 #include<SpinLockLTM.h>
 #include<ScopedLock.h>
 #include<FrameListener.h>
+#include<atomic>
 
 class GameLoopManager {
 public:
@@ -23,7 +24,7 @@ private:
 
 	SpinLockLTM m_lockRunning;
 	std::vector<std::shared_ptr<FrameListener>> m_frameLisList;
-	bool m_running = true;
+	std::atomic<bool> m_running = true;
 
 	GameLoopManager();
 };

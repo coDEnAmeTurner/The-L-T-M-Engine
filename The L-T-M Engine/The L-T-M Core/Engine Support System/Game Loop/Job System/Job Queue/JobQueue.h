@@ -1,5 +1,5 @@
 #pragma once
-#include <queue>
+#include <concurrentqueue.h>
 #include <ScopedLock.h>
 #include <SpinLockLTM.h>
 #include <Job Properties.h>
@@ -11,7 +11,7 @@ public:
 	void Push(JobDeclaration* job);
 	JobDeclaration* Pop();
 private:
-	SpinLockLTM m_lock;
-	std::queue<JobDeclaration*> m_queue;
+	SpinLockLTM m_mutex;
+	moodycamel::ConcurrentQueue<JobDeclaration*> m_queue;
 };
 

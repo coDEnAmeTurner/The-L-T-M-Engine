@@ -12,26 +12,48 @@
 #include <PoolAllocator.h>
 #include <FileHandler.h>
 #include <GameLoopManager.h>
+#include <JobSystem.h>
 #include <CPUSpecs.h>
 #include <Test.h>
+#include <GameLoop Common.h>
 
 int main() {
+	set_thread_affinity(GetCurrentThread(), 0);
+	//SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
+
+	CPUSpecs::init();
 	GameLoopManager::init();
+	JobSystem::init();
 
+	bool firsttime = true;
 	while (GameLoopManager::getRunning()) {
-		for (const auto& listener : GameLoopManager::getFrameListnerList()) {
-			listener->frameStarted();
+		if (!GameLoopManager::getFrameListnerList().empty())
+			for (const auto& listener : GameLoopManager::getFrameListnerList()) {
+				listener->frameStarted();
 
-		}
-		
+			}
+
 		GameLoopManager::renderMain();
 
-		for (const auto& listener : GameLoopManager::getFrameListnerList()) {
-			listener->frameEnded();
-
+		if (firsttime)
+		{
+			testJobSystem();
+			firsttime = false;
 		}
+
+		std::cout << "Dummy is " << std::endl; // Should print 42
+
+		if (!GameLoopManager::getFrameListnerList().empty())
+			for (const auto& listener : GameLoopManager::getFrameListnerList()) {
+				listener->frameEnded();
+
+			}
+		std::this_thread::yield();
+
 	}
 
+	JobSystem::destroy();
 	GameLoopManager::destroy();
+	CPUSpecs::destroy();
 	return 0;
 }

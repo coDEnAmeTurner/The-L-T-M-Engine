@@ -6,20 +6,33 @@ CPUSpecs::CPUSpecs() {
     int cpuInfo[4];
 
     //get word size
-    __cpuid(cpuInfo, 0x80000008);  // Query leaf 0x80000008
-    int eax = cpuInfo[0];
-    int physical_address_bits = eax & 0xFF;         // bits 7..0
-    int virtual_address_bits = (eax >> 8) & 0xFF;   // bits 15..8
-    m_wordSize = (physical_address_bits + virtual_address_bits) / BITS_IN_BYTE;
+    m_wordSize = 32;
+    __cpuid(cpuInfo, 0x80000000);
 
-    //get total logical core count
-    __cpuid(cpuInfo, 0x0B);
-    m_logicalCoreCount = cpuInfo[1] & 0xFFFF;
+    if (cpuInfo[0] >= 0x80000001) {
+        __cpuid(cpuInfo, 0x80000001);
+        m_wordSize = ternary_pred((cpuInfo[3] & (1 << 29)) != 0, (uint8_t)64, m_wordSize); // Check EDX bit 29
+    }
 
-    //get total physical core count per processor package (die, socket,...)
-    __cpuid(cpuInfo, 0x00000004); // Deterministic Cache Parameters Leaf
-    m_physicalCoreCount = ((cpuInfo[0] >> 14) & 0xFFF) + 1;
+    //get number of logical and physical cores
+    int smtCount = 0;
+    int logicalProcessors = 0;
+    for (int level = 0;; ++level) {
+        __cpuidex(cpuInfo, 0x0B, level);
+        int levelType = (cpuInfo[2] >> 8) & 0xFF;
+        int num = cpuInfo[1] & 0xFFFF;
 
+        if (num == 0)
+            break;
+
+        if (levelType == 1)  // Core level
+            logicalProcessors = num;
+        else if (levelType == 2) // SMT (HyperThreading) level
+            smtCount = num;
+    }
+    m_physicalCoreCount = smtCount/ logicalProcessors;
+    m_logicalCoreCount = logicalProcessors;
+    m_allThreadCount = smtCount;
 
 }
 
@@ -45,4 +58,9 @@ std::uint8_t CPUSpecs::getPhysicalCoreCount()
 std::uint8_t CPUSpecs::getLogicalCoreCount()
 {
     return s_instance->m_logicalCoreCount;
+}
+
+std::uint8_t CPUSpecs::getAllThreadCount()
+{
+    return s_instance->m_allThreadCount;
 }
