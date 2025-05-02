@@ -6,10 +6,10 @@
 class DoubleEndedStackAllocator : public StackAllocator
 {
 public:
-	DoubleEndedStackAllocator(std::uint32_t size, std::uint32_t align);
+	DoubleEndedStackAllocator(std::uint32_t m_size, std::uint32_t align);
 	~DoubleEndedStackAllocator();
 
-	char* allocateFromBack(std::uint32_t size);
+	char* allocateFromBack(std::uint32_t m_size);
 	void deallocateFromBack(char* rollback_to_ptr, uint32_t block_size);
 
 	char* getBack_p1() const;

@@ -3,11 +3,14 @@
 #include <cstdint>
 #include <CPUSpecs.h>
 #include <vector>
+#include <cassert>
 #include <ThreadLTM.h>
 #include <Job Properties.h>
 #include <JobQueue.h>
 #include <MutexLTM.h>
 #include <SpinLockLTM.h>
+#include <GameLoopManager.h>
+#include <FiberLTM.h>
 
 class JobSystem {
 public:
@@ -18,11 +21,11 @@ public:
 	static void kickJobs(int count, JobDeclaration aDecl[]);
 	// wait for job to terminate (for its Counter to become zero)
 	static void waitForCounter(std::atomic<std::shared_ptr<Counter>>& pCounter);
-	static void decrementCounter(std::atomic<std::shared_ptr<Counter>>& pCounter);
-	static void incrementCounter(std::atomic<std::shared_ptr<Counter>>& pCounter);
+
 	// kick jobs and wait for completion
 	static void kickJobAndWait(JobDeclaration& decl);
 	static void kickJobsAndWait(int count, JobDeclaration aDecl[]);
+
 private:
 	static std::unique_ptr<JobSystem> s_instance;
 

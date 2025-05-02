@@ -19,7 +19,7 @@
 
 int main() {
 	set_thread_affinity(GetCurrentThread(), 0);
-	//SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
+	SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
 
 	CPUSpecs::init();
 	GameLoopManager::init();
@@ -27,6 +27,11 @@ int main() {
 
 	bool firsttime = true;
 	while (GameLoopManager::getRunning()) {
+		GameLoopManager::getDoubleBufferMain()->swapBuffers();
+		GameLoopManager::getStackMain()->clear();
+		GameLoopManager::getDoubleBufferMain()->clearCurrentBuffer();
+		GameLoopManager::getDoubleEndedMain()->clear();
+
 		if (!GameLoopManager::getFrameListnerList().empty())
 			for (const auto& listener : GameLoopManager::getFrameListnerList()) {
 				listener->frameStarted();

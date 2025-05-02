@@ -6,6 +6,9 @@
 #include<SpinLockLTM.h>
 #include<ScopedLock.h>
 #include<FrameListener.h>
+#include<StackAllocator.h>
+#include<DoubleEndedStackAllocator.h>
+#include<DoubleBufferedAllocator.h>
 #include<atomic>
 
 class GameLoopManager {
@@ -19,8 +22,19 @@ public:
 	static void renderMain();
 	static bool getRunning();
 	static void setRunning(bool run);
+
+	static std::shared_ptr<StackAllocator> getStackMain();
+	static std::shared_ptr<DoubledBufferedAllocator> getDoubleBufferMain();
+	static std::shared_ptr<DoubleEndedStackAllocator> getDoubleEndedMain();
+
+
+
 private:
 	static std::unique_ptr<GameLoopManager> s_instance;
+
+	std::shared_ptr<StackAllocator> m_stackMain;
+	std::shared_ptr<DoubledBufferedAllocator> m_doubleBufferMain;
+	std::shared_ptr<DoubleEndedStackAllocator> m_doubleEndedMain;
 
 	SpinLockLTM m_lockRunning;
 	std::vector<std::shared_ptr<FrameListener>> m_frameLisList;

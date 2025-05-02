@@ -1,10 +1,10 @@
 #include "DoubleEndedStackAllocator.h"
 
-DoubleEndedStackAllocator::DoubleEndedStackAllocator(std::uint32_t size, std::uint32_t align)
-	: StackAllocator(size, align) // Call the base class constructor
+DoubleEndedStackAllocator::DoubleEndedStackAllocator(std::uint32_t m_size, std::uint32_t align)
+	: StackAllocator(m_size, align) // Call the base class constructor
 {
 	//using 1 past byte method: back is pointing at 1 byte out of bound
-	m_back_p1 = m_front + size;
+	m_back_p1 = m_front + m_size;
 	m_topBack_p1 = m_back_p1;
 	m_topBackMarker = 0;
 }
@@ -15,12 +15,12 @@ DoubleEndedStackAllocator::~DoubleEndedStackAllocator()
 	m_topBackMarker = 0;
 }
 
-char* DoubleEndedStackAllocator::allocateFromBack(std::uint32_t size)
+char* DoubleEndedStackAllocator::allocateFromBack(std::uint32_t m_size)
 {
-	assert(size > 0);
+	assert(m_size > 0);
 
-	std::uint32_t align = ternary_pred(size >= m_align, size, m_align);
-	char* noaligned_topback = m_topBack_p1 - size;
+	std::uint32_t align = ternary_pred(m_size >= m_align, m_size, m_align);
+	char* noaligned_topback = m_topBack_p1 - m_size;
 	char* pre_aligned_topback = noaligned_topback - align;
 
 	assert(pre_aligned_topback >= m_topfront);

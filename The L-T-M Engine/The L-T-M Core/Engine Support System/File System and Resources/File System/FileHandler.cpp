@@ -17,25 +17,25 @@ FileHandler::~FileHandler() {
 }
 
 // Asynchronous file read
-void FileHandler::readFileAsync(size_t size) {
+void FileHandler::readFileAsync(size_t m_size) {
     if (!m_file || !m_file->is_open()) {
         std::cerr << "File is not open yet!" << std::endl;
         return;
     }
 
     // Launch async task to read from the file
-    m_asyncReadFile = std::async(std::launch::async, &FileHandler::readFile, this, size);
+    m_asyncReadFile = std::async(std::launch::async, &FileHandler::readFile, this, m_size);
 }
 
 // Asynchronous file read
-void FileHandler::writeFileAsync(const char* bytes, size_t size) {
+void FileHandler::writeFileAsync(const char* bytes, size_t m_size) {
     if (!m_file || !m_file->is_open()) {
         std::cerr << "File is not open yet!" << std::endl;
         return;
     }
 
     // Launch async task to read from the file
-    m_asyncWriteFile = std::async(std::launch::async, &FileHandler::writeFile, this, bytes, size);
+    m_asyncWriteFile = std::async(std::launch::async, &FileHandler::writeFile, this, bytes, m_size);
 }
 
 // Wait for the file to be opened and read
@@ -64,22 +64,29 @@ void FileHandler::openFile(std::ios::openmode mode) {
 
 // Read `size` bytes from the file
 void FileHandler::readFile(size_t size) {
+    m_file->seekg(0, std::ios::beg);
+
+
     m_buffer = new char[size + 1];
     if (m_file->read(m_buffer, size)) {
         std::cout << "Read " << m_file->gcount() << " bytes from m_file" << std::endl;
         *(m_buffer + size) = '\0';
+        this->m_size = size +1;
     }
     else {
         std::cerr << "Failed to read from the m_file" << std::endl;
     }
 }
 
-void FileHandler::writeFile(const char* bytes, size_t size) {
+void FileHandler::writeFile(const char* bytes, size_t m_size) {
     if (!m_file->is_open()) {
         throw std::runtime_error("File not open for writing.");
     }
+    std::cout << "Writing to file...\n";
+    m_file->write(bytes, m_size);
+    m_file->flush();  // optional but safe
 
-    m_file->write(bytes, size);
+
     if (!m_file) {
         throw std::runtime_error("Failed to write to file.");
     }

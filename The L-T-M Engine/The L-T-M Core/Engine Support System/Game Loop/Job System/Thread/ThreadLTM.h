@@ -31,12 +31,10 @@ private:
 	std::shared_ptr<StackAllocator> m_stack;
 	std::shared_ptr<DoubleEndedStackAllocator> m_doubleEndedStack;
 	std::shared_ptr<DoubledBufferedAllocator> m_doubleBuffers;
-	std::atomic<std::shared_ptr<bool>> m_finished = 0; //pass to JobParams so that fiber entry func can notify this thread
 
 	SpinLockLTM m_lockRunning;
-	SpinLockLTM m_lockFinished;
 	std::shared_ptr<std::mutex> m_mutexThread = nullptr;
 	std::shared_ptr<std::condition_variable> m_condVarThread = nullptr;
 	
-	void entryPoint();
+	void entryPointThread();
 };

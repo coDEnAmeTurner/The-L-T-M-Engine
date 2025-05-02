@@ -16,7 +16,7 @@ enum class Priority {
 };
 
 struct Counter {
-	std::uint32_t m_count = 0;
+	std::uint32_t m_count = 1;
 	std::mutex m_mutex;
 	std::condition_variable m_condVar;
 
@@ -34,9 +34,8 @@ struct JobParams {
 	std::shared_ptr<DoubleEndedStackAllocator> m_doubleEndedStack = nullptr;
 	std::shared_ptr<DoubledBufferedAllocator> m_doubleBuffers = nullptr;
 
-	std::atomic<std::shared_ptr<bool>> m_finished = nullptr; //notify thread current fiber is finished
-	SpinLockLTM* m_lockFinished = nullptr;
 	std::atomic<std::shared_ptr<Counter>> m_pCounter = std::shared_ptr<Counter>(new Counter());
+	PVOID m_fiberParent = nullptr;
 
 	//caller provides:
 	void* m_param = nullptr;

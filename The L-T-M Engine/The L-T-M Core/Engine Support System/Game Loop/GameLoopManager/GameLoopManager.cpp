@@ -3,7 +3,9 @@
 std::unique_ptr<GameLoopManager> GameLoopManager::s_instance = nullptr;
 
 GameLoopManager::GameLoopManager() {
-	//{placeholder}
+	m_stackMain = std::shared_ptr<StackAllocator>(new StackAllocator(WORD_SIZE * pow_of_2(20), MINIMUM_ALIGNMENT)); //8MB
+	m_doubleEndedMain = std::shared_ptr<DoubleEndedStackAllocator>(new DoubleEndedStackAllocator(WORD_SIZE * pow_of_2(21), MINIMUM_ALIGNMENT)); //16MB
+	m_doubleBufferMain = std::shared_ptr<DoubledBufferedAllocator>(new DoubledBufferedAllocator(WORD_SIZE * pow_of_2(20), MINIMUM_ALIGNMENT)); //8MB
 }
 
 void GameLoopManager::init() {
@@ -54,4 +56,19 @@ void GameLoopManager::setRunning(bool run)
 {
 	//ScopedLock<SpinLockLTM> lock(&s_instance->m_lockRunning);
 	s_instance->m_running.store(run, std::memory_order_relaxed);
+}
+
+std::shared_ptr<StackAllocator> GameLoopManager::getStackMain()
+{
+	return s_instance->m_stackMain;
+}
+
+std::shared_ptr<DoubledBufferedAllocator> GameLoopManager::getDoubleBufferMain()
+{
+	return s_instance->m_doubleBufferMain;
+}
+
+std::shared_ptr<DoubleEndedStackAllocator> GameLoopManager::getDoubleEndedMain()
+{
+	return s_instance->m_doubleEndedMain;
 }

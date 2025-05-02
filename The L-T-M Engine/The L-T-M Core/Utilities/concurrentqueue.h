@@ -394,18 +394,18 @@ struct ConcurrentQueueDefaultTraits
 #if defined(malloc) || defined(free)
 	// Gah, this is 2015, stop defining macros that break standard code already!
 	// Work around malloc/free being special macros:
-	static inline void* WORKAROUND_malloc(size_t size) { return malloc(size); }
+	static inline void* WORKAROUND_malloc(size_t m_size) { return malloc(m_size); }
 	static inline void WORKAROUND_free(void* ptr) { return free(ptr); }
-	static inline void* (malloc)(size_t size) { return WORKAROUND_malloc(size); }
+	static inline void* (malloc)(size_t m_size) { return WORKAROUND_malloc(m_size); }
 	static inline void (free)(void* ptr) { return WORKAROUND_free(ptr); }
 #else
-	static inline void* malloc(size_t size) { return std::malloc(size); }
+	static inline void* malloc(size_t m_size) { return std::malloc(m_size); }
 	static inline void free(void* ptr) { return std::free(ptr); }
 #endif
 #else
 	// Debug versions when running under the Relacy race detector (ignore
 	// these in user code)
-	static inline void* malloc(size_t size) { return rl::rl_malloc(size, $); }
+	static inline void* malloc(size_t m_size) { return rl::rl_malloc(m_size, $); }
 	static inline void free(void* ptr) { return rl::rl_free(ptr, $); }
 #endif
 };
@@ -464,7 +464,7 @@ namespace details
 			return h ^ (h >> 33);
 		}
 	};
-	template<std::size_t size> struct hash_32_or_64 : public _hash_32_or_64<(size > 4)> {  };
+	template<std::size_t m_size> struct hash_32_or_64 : public _hash_32_or_64<(m_size > 4)> {  };
 	
 	static inline size_t hash_thread_id(thread_id_t id)
 	{
@@ -1130,10 +1130,10 @@ public:
 		ProducerBase* best = nullptr;
 		size_t bestSize = 0;
 		for (auto ptr = producerListTail.load(std::memory_order_acquire); nonEmptyCount < 3 && ptr != nullptr; ptr = ptr->next_prod()) {
-			auto size = ptr->size_approx();
-			if (size > 0) {
-				if (size > bestSize) {
-					bestSize = size;
+			auto m_size = ptr->size_approx();
+			if (m_size > 0) {
+				if (m_size > bestSize) {
+					bestSize = m_size;
 					best = ptr;
 				}
 				++nonEmptyCount;
@@ -1324,11 +1324,11 @@ public:
 	// Thread-safe.
 	size_t size_approx() const
 	{
-		size_t size = 0;
+		size_t m_size = 0;
 		for (auto ptr = producerListTail.load(std::memory_order_acquire); ptr != nullptr; ptr = ptr->next_prod()) {
-			size += ptr->size_approx();
+			m_size += ptr->size_approx();
 		}
-		return size;
+		return m_size;
 	}
 	
 	
@@ -2014,7 +2014,7 @@ private:
 					auto headBase = localBlockIndex->entries[localBlockIndexHead].base;
 					auto blockBaseIndex = index & ~static_cast<index_t>(BLOCK_SIZE - 1);
 					auto offset = static_cast<size_t>(static_cast<typename std::make_signed<index_t>::type>(blockBaseIndex - headBase) / static_cast<typename std::make_signed<index_t>::type>(BLOCK_SIZE));
-					auto block = localBlockIndex->entries[(localBlockIndexHead + offset) & (localBlockIndex->size - 1)].block;
+					auto block = localBlockIndex->entries[(localBlockIndexHead + offset) & (localBlockIndex->m_size - 1)].block;
 					
 					// Dequeue
 					auto& el = *((*block)[index]);
@@ -2275,7 +2275,7 @@ private:
 					auto headBase = localBlockIndex->entries[localBlockIndexHead].base;
 					auto firstBlockBaseIndex = firstIndex & ~static_cast<index_t>(BLOCK_SIZE - 1);
 					auto offset = static_cast<size_t>(static_cast<typename std::make_signed<index_t>::type>(firstBlockBaseIndex - headBase) / static_cast<typename std::make_signed<index_t>::type>(BLOCK_SIZE));
-					auto indexIndex = (localBlockIndexHead + offset) & (localBlockIndex->size - 1);
+					auto indexIndex = (localBlockIndexHead + offset) & (localBlockIndex->m_size - 1);
 					
 					// Iterate the blocks and dequeue
 					auto index = firstIndex;
@@ -2312,7 +2312,7 @@ private:
 										(*block)[index++]->~T();
 									}
 									block->ConcurrentQueue::Block::template set_many_empty<explicit_context>(firstIndexInBlock, static_cast<size_t>(endIndex - firstIndexInBlock));
-									indexIndex = (indexIndex + 1) & (localBlockIndex->size - 1);
+									indexIndex = (indexIndex + 1) & (localBlockIndex->m_size - 1);
 									
 									firstIndexInBlock = index;
 									endIndex = (index & ~static_cast<index_t>(BLOCK_SIZE - 1)) + static_cast<index_t>(BLOCK_SIZE);
@@ -2323,7 +2323,7 @@ private:
 							}
 						}
 						block->ConcurrentQueue::Block::template set_many_empty<explicit_context>(firstIndexInBlock, static_cast<size_t>(endIndex - firstIndexInBlock));
-						indexIndex = (indexIndex + 1) & (localBlockIndex->size - 1);
+						indexIndex = (indexIndex + 1) & (localBlockIndex->m_size - 1);
 					} while (index != firstIndex + actualCount);
 					
 					return actualCount;
@@ -2346,7 +2346,7 @@ private:
 		
 		struct BlockIndexHeader
 		{
-			size_t size;
+			size_t m_size;
 			std::atomic<size_t> front;		// Current slot (not next, like pr_blockIndexFront)
 			BlockIndexEntry* entries;
 			void* prev;
@@ -2379,7 +2379,7 @@ private:
 			
 			// Update everything
 			auto header = new (newRawPtr) BlockIndexHeader;
-			header->size = pr_blockIndexSize;
+			header->m_size = pr_blockIndexSize;
 			header->front.store(numberOfFilledSlotsToExpose - 1, std::memory_order_relaxed);
 			header->entries = newBlockIndexEntries;
 			header->prev = pr_blockIndexRaw;		// we link the new block to the old one so we can free it later
@@ -3576,13 +3576,13 @@ private:
 	//////////////////////////////////
 
 	template<typename TAlign>
-	static inline void* aligned_malloc(size_t size)
+	static inline void* aligned_malloc(size_t m_size)
 	{
 		MOODYCAMEL_CONSTEXPR_IF (std::alignment_of<TAlign>::value <= std::alignment_of<details::max_align_t>::value)
-			return (Traits::malloc)(size);
+			return (Traits::malloc)(m_size);
 		else {
 			size_t alignment = std::alignment_of<TAlign>::value;
-			void* raw = (Traits::malloc)(size + alignment - 1 + sizeof(void*));
+			void* raw = (Traits::malloc)(m_size + alignment - 1 + sizeof(void*));
 			if (!raw)
 				return nullptr;
 			char* ptr = details::align_for<TAlign>(reinterpret_cast<char*>(raw) + sizeof(void*));
