@@ -13,19 +13,19 @@ public:
 	static void switchToFiber(PVOID fiber);
 	static void decrementCounter(std::atomic<std::shared_ptr<Counter>>& pCounter);
 	static void incrementCounter(std::atomic<std::shared_ptr<Counter>>& pCounter);
-	static std::shared_ptr<FiberLTM> createFiber(JobDeclaration* decl);
+	static std::shared_ptr<FiberLTM> createFiber(std::shared_ptr<JobDeclaration> decl);
 
-	FiberLTM(JobDeclaration* job);
+	FiberLTM(std::shared_ptr<JobDeclaration> job);
 	FiberLTM(EntryPoint func);
 	~FiberLTM();
 
 	operator void* () const { return m_ref; }
 private:
 	void* m_ref;
-	JobDeclaration* m_job;
+	std::shared_ptr<JobDeclaration> m_job;
 
-	void create(EntryPoint func);
-	void create(JobDeclaration* job);
+	//void create(EntryPoint func);
+	void create(std::shared_ptr<JobDeclaration> job);
 	static void __stdcall entryPointFiber(LPVOID p);
 
 };

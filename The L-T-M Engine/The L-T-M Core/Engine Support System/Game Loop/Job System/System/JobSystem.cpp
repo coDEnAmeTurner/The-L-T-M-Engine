@@ -8,7 +8,17 @@ JobSystem::JobSystem()
 	m_queueObj = std::shared_ptr< JobQueue>(new JobQueue());
 	std::uint8_t thread_count = ALL_THREAD_COUNT / 2;
 	for (int i = 0; i < thread_count; i++) {
-		m_threadPool.emplace_back(std::shared_ptr<ThreadLTM>(new ThreadLTM(m_queueObj, i + 1, m_mutexThread, m_condVarThread)));
+		m_threadPool.emplace_back(
+			std::shared_ptr<ThreadLTM>(
+				new ThreadLTM(
+					m_queueObj, 
+					i + 2, 
+					m_mutexThread, 
+					m_condVarQueue,
+					m_queueReady
+				)
+			)
+		);
 	}
 }
 
@@ -32,17 +42,18 @@ void JobSystem::destroy()
 	}
 }
 
-void JobSystem::kickJob(JobDeclaration& decl)
+void JobSystem::kickJob(std::shared_ptr<JobDeclaration>& decl)
 {
-	s_instance->m_queueObj->Push(&decl);
 	std::unique_lock<std::mutex> lock(*s_instance->m_mutexThread);
-	s_instance->m_condVarThread->notify_all();
+	s_instance->m_queueObj->Push(decl);
+	*s_instance->m_queueReady = true;
+	s_instance->m_condVarQueue->notify_all();
 }
 
-void JobSystem::kickJobs(int count, JobDeclaration aDecl[])
+void JobSystem::kickJobs(int count, std::shared_ptr<JobDeclaration> aDecl[])
 {
 	for (size_t i = 0; i < count; i++) {
-		JobParams* p = aDecl[i].m_params;
+		auto p = aDecl[i]->m_params;
 		if (p->m_pCounter.load(std::memory_order_relaxed) != nullptr)
 			FiberLTM::incrementCounter(p->m_pCounter);
 
@@ -64,19 +75,19 @@ void JobSystem::waitForCounter(std::atomic<std::shared_ptr<Counter>>& pCounter)
 }
 
 
-void JobSystem::kickJobAndWait(JobDeclaration& decl)
+void JobSystem::kickJobAndWait(std::shared_ptr<JobDeclaration>& decl)
 {
-	JobParams* p = decl.m_params;
+	auto p = decl->m_params;
 	kickJob(decl);
 	waitForCounter(p->m_pCounter);
 }
 
-void JobSystem::kickJobsAndWait(int count, JobDeclaration aDecl[])
+void JobSystem::kickJobsAndWait(int count, std::shared_ptr<JobDeclaration> aDecl[])
 {
 	kickJobs(count, aDecl);
 
 	for (size_t i = 0; i < count; i++) {
-		JobParams* p = aDecl[i].m_params;
+		auto p = aDecl[i]->m_params;
 		waitForCounter(p->m_pCounter);
 	}
 }

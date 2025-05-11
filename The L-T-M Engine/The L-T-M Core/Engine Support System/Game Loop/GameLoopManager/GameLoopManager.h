@@ -4,6 +4,7 @@
 #include<cassert>
 #include<algorithm>
 #include<SpinLockLTM.h>
+#include<MutexLTM.h>
 #include<ScopedLock.h>
 #include<FrameListener.h>
 #include<StackAllocator.h>
@@ -22,6 +23,7 @@ public:
 	static void renderMain();
 	static bool getRunning();
 	static void setRunning(bool run);
+	static MutexLTM& getMutexConsole();
 
 	static std::shared_ptr<StackAllocator> getStackMain();
 	static std::shared_ptr<DoubledBufferedAllocator> getDoubleBufferMain();
@@ -36,9 +38,11 @@ private:
 	std::shared_ptr<DoubledBufferedAllocator> m_doubleBufferMain;
 	std::shared_ptr<DoubleEndedStackAllocator> m_doubleEndedMain;
 
-	SpinLockLTM m_lockRunning;
 	std::vector<std::shared_ptr<FrameListener>> m_frameLisList;
+
+	SpinLockLTM m_lockRunning;
 	std::atomic<bool> m_running = true;
+	MutexLTM m_mutexConsole;
 
 	GameLoopManager();
 };

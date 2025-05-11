@@ -15,20 +15,20 @@ void FiberLTM::incrementCounter(std::atomic<std::shared_ptr<Counter>>& pCounter)
 	pCounter.store(std::shared_ptr<Counter>(new Counter(c)));
 }
 
-std::shared_ptr<FiberLTM> FiberLTM::createFiber(JobDeclaration* decl)
+std::shared_ptr<FiberLTM> FiberLTM::createFiber(std::shared_ptr<JobDeclaration> decl)
 {
 	auto fiber = std::shared_ptr<FiberLTM>(new FiberLTM(decl));
 	return fiber;
 }
 
-FiberLTM::FiberLTM(JobDeclaration* job)
+FiberLTM::FiberLTM(std::shared_ptr<JobDeclaration> job)
 {
 	create(job);
 }
 
 FiberLTM::FiberLTM(EntryPoint func)
 {
-	create(func);
+	//create(func);
 }
 
 FiberLTM::~FiberLTM()
@@ -55,7 +55,7 @@ void FiberLTM::decrementCounter(std::atomic<std::shared_ptr<Counter>>& pCounter)
 	c.m_condVar.notify_one();
 }
 
-void FiberLTM::create(JobDeclaration* job)
+void FiberLTM::create(std::shared_ptr<JobDeclaration> job)
 {
 	assert(m_ref == nullptr);
 
@@ -66,17 +66,24 @@ void FiberLTM::create(JobDeclaration* job)
 void __stdcall FiberLTM::entryPointFiber(LPVOID p)
 {
 	FiberLTM* self = reinterpret_cast<FiberLTM*>(p);
+
+	FiberLTM::incrementCounter(self->m_job->m_params->m_pCounter);
 	self->m_job->m_pEntryPoint(self->m_job->m_params);
-	assert(self->m_job->m_params->m_fiberParent != nullptr);
+	assert(
+		self->m_job != nullptr && 
+		self->m_job->m_params != nullptr &&
+		self->m_job->m_params->m_fiberParent != nullptr
+	);
+	FiberLTM::decrementCounter(self->m_job->m_params->m_pCounter);
 	FiberLTM::switchToFiber(self->m_job->m_params->m_fiberParent);
 }
 
-void FiberLTM::create(EntryPoint func )
-{
-	assert(m_ref == nullptr);
-
-	m_ref = CreateFiber(0, func, nullptr);
-}
+//void FiberLTM::create(EntryPoint func)
+//{
+//	assert(m_ref == nullptr);
+//
+//	m_ref = CreateFiber(0, func, nullptr);
+//}
 
 void FiberLTM::destroy()
 {

@@ -17,7 +17,7 @@
 class ThreadLTM {
 public:
 	ThreadLTM();
-	ThreadLTM(std::shared_ptr<JobQueue> queue, std::uint8_t core_id, std::shared_ptr<std::mutex> m_mutexThread,std::shared_ptr<std::condition_variable> m_condVarThread);
+	ThreadLTM(std::shared_ptr<JobQueue> queue, std::uint8_t core_id, std::shared_ptr<std::mutex> m_mutexThread,std::shared_ptr<std::condition_variable> m_condVarQueue, std::shared_ptr<bool> m_queueReady);
 
 	void destroy();
 private:
@@ -26,7 +26,7 @@ private:
 	std::uint8_t m_coreID = 0;
 
 	FiberLTM* m_masterFiber = nullptr;
-	JobDeclaration* m_masterJob;
+	std::shared_ptr<JobDeclaration> m_masterJob;
 	std::shared_ptr<JobQueue> m_queue;
 	std::shared_ptr<StackAllocator> m_stack;
 	std::shared_ptr<DoubleEndedStackAllocator> m_doubleEndedStack;
@@ -34,7 +34,8 @@ private:
 
 	SpinLockLTM m_lockRunning;
 	std::shared_ptr<std::mutex> m_mutexThread = nullptr;
-	std::shared_ptr<std::condition_variable> m_condVarThread = nullptr;
+	std::shared_ptr<std::condition_variable> m_condVarQueue = nullptr;
+	std::shared_ptr<bool> m_queueReady = nullptr;
 	
 	void entryPointThread();
 };

@@ -6,9 +6,10 @@ ThreadLTM::ThreadLTM()
 
 }
 
-ThreadLTM::ThreadLTM(std::shared_ptr<JobQueue> queue, std::uint8_t core_id, std::shared_ptr<std::mutex> m_mutexThread, std::shared_ptr<std::condition_variable> m_condVarThread)
+ThreadLTM::ThreadLTM(std::shared_ptr<JobQueue> queue, std::uint8_t core_id, std::shared_ptr<std::mutex> m_mutexThread, std::shared_ptr<std::condition_variable> m_condVarQueue, std::shared_ptr<bool> m_queueReady)
 	:m_coreID(core_id), m_queue(queue), m_masterJob(nullptr),
-	m_mutexThread(m_mutexThread), m_condVarThread(m_condVarThread)
+	m_mutexThread(m_mutexThread), m_condVarQueue(m_condVarQueue),
+	m_queueReady(m_queueReady)
 {
 	assert(queue != nullptr);
 
@@ -28,10 +29,11 @@ void ThreadLTM::destroy()
 
 void ThreadLTM::entryPointThread()
 {
-	ConvertThreadToFiber(nullptr);
 	m_threadID = GetCurrentThreadId();
 
 	set_thread_affinity(GetCurrentThread(), m_coreID);
+
+	ConvertThreadToFiber(nullptr);
 
 	while (true) {
 		ScopedLock<SpinLockLTM> lock(&m_lockRunning);
@@ -48,12 +50,12 @@ void ThreadLTM::entryPointThread()
 		//pop queue
 		if (m_masterFiber == nullptr && m_masterJob == nullptr)
 		{
-			JobDeclaration* job = nullptr;
-
 			std::unique_lock<std::mutex> lock(*m_mutexThread);
-			m_condVarThread->wait(lock, [&]() {job = m_queue->Pop(); return job != nullptr; });
+			m_condVarQueue->wait(lock, [&]() {return *m_queueReady; });
 
-			this->m_masterJob = job;
+			this->m_masterJob = m_queue->Pop();
+			lock.release();
+			*m_queueReady = false;
 
 			m_masterJob->m_params->m_doubleBuffers = m_doubleBuffers;
 			m_masterJob->m_params->m_doubleEndedStack = m_doubleEndedStack;
@@ -63,12 +65,9 @@ void ThreadLTM::entryPointThread()
 			FiberLTM fiber(m_masterJob);
 			m_masterFiber = &fiber;
 			FiberLTM::switchToFiber(fiber.getRef());
-			FiberLTM::decrementCounter(m_masterJob->m_params->m_pCounter);
-
+			
 		}
 		
-		std::this_thread::yield();
-
 	}
 
 	ConvertFiberToThread();

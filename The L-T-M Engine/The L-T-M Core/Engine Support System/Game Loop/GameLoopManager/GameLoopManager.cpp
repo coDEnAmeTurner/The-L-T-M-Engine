@@ -58,6 +58,11 @@ void GameLoopManager::setRunning(bool run)
 	s_instance->m_running.store(run, std::memory_order_relaxed);
 }
 
+MutexLTM& GameLoopManager::getMutexConsole()
+{
+	return s_instance->m_mutexConsole;
+}
+
 std::shared_ptr<StackAllocator> GameLoopManager::getStackMain()
 {
 	return s_instance->m_stackMain;

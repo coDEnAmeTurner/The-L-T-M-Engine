@@ -17,15 +17,18 @@
 #include <Test.h>
 #include <GameLoop Common.h>
 
+SpinLockLTM g_spin;
+
 int main() {
 	set_thread_affinity(GetCurrentThread(), 0);
-	SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
+	//SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
 
 	CPUSpecs::init();
 	GameLoopManager::init();
 	JobSystem::init();
 
-	bool firsttime = true;
+	bool firstTime = true;
+
 	while (GameLoopManager::getRunning()) {
 		GameLoopManager::getDoubleBufferMain()->swapBuffers();
 		GameLoopManager::getStackMain()->clear();
@@ -37,16 +40,15 @@ int main() {
 				listener->frameStarted();
 
 			}
-
-		GameLoopManager::renderMain();
-
-		if (firsttime)
+		if (firstTime)
 		{
+			firstTime = false;
 			testJobSystem();
-			firsttime = false;
 		}
 
-		std::cout << "Dummy is " << std::endl; // Should print 42
+		std::cout << "Dummy text" << std::endl; // Should print 42
+
+		GameLoopManager::renderMain();
 
 		if (!GameLoopManager::getFrameListnerList().empty())
 			for (const auto& listener : GameLoopManager::getFrameListnerList()) {

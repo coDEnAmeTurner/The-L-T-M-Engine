@@ -38,13 +38,13 @@ struct JobParams {
 	PVOID m_fiberParent = nullptr;
 
 	//caller provides:
-	void* m_param = nullptr;
+	std::shared_ptr<void> m_funcParams = nullptr;
 
 };
-using EntryPoint = void(__stdcall*)(void*);
+using EntryPoint = void(__stdcall*)(std::shared_ptr<JobParams>);
 
 struct JobDeclaration {
 	EntryPoint m_pEntryPoint = nullptr;
-	JobParams* m_params = nullptr;
+	std::shared_ptr<JobParams> m_params = nullptr;
 };
 
